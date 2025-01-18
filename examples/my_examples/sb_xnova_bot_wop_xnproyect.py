@@ -38,7 +38,6 @@ def realistic_browser_history(sb):
 
 
 def antibot_detection(sb):
-    try:
         url = "https://seleniumbase.io/antibot/login"
         sb.activate_cdp_mode(url)
         sb.cdp.sleep(RANDOM_SLEEP)
@@ -57,13 +56,11 @@ def antibot_detection(sb):
         sb.post_message("SeleniumBase wasn't detected!")
         sb.cdp.sleep(RANDOM_SLEEP)
         sb.sleep(15)
-    except:
         print("Bot detected!")
         sb.cdp.sleep(15)
 
 
 def browser_scan(sb):
-    try:
         url = "https://www.browserscan.net/bot-detection"
         sb.activate_cdp_mode(url)
         sb.sleep(1)
@@ -73,13 +70,11 @@ def browser_scan(sb):
         sb.cdp.sleep(RANDOM_SLEEP)
         sb.cdp.flash('strong:contains("Normal")', duration=4, pause=4)
         sb.sleep(5)
-    except:
         print('Bot detected!')
         sb.cdp.sleep(RANDOM_SLEEP)
 
 
 def fingerprint(sb):
-    try:
         url = "https://demo.fingerprint.com/playground"
         sb.activate_cdp_mode(url)
         sb.sleep(1)
@@ -89,7 +84,6 @@ def fingerprint(sb):
         sb.cdp.assert_text("Bot Not detected", bot_row_selector)
         sb.cdp.highlight(bot_row_selector)
         sb.sleep(2)
-    except:
         print('Bot detected!')
         sb.cdp.sleep(RANDOM_SLEEP)
 
