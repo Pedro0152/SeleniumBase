@@ -22,68 +22,69 @@ RECURSOS = 'span:contains("Recursos")'
 
 
 def realistic_browser_history(sb):
-        sb.cdp.get("https://www.google.com/")
-        sb.sleep(RANDOM_SLEEP)
-        sb.cdp.send_keys("APjFqb", "ogame\n")
-        sb.sleep(RANDOM_SLEEP)
-        sb.cdp.send_keys("APjFqb", "ogame wikipedia\n")
-        sb.sleep(RANDOM_SLEEP)
-        sb.cdp.click('h3:contains("OGame - Wikipedia, la enciclopedia libre")')
-        print('History Suscesfully!')
-        sb.sleep(RANDOM_SLEEP)
-        print('History fail!')
-        sb.sleep(RANDOM_SLEEP)
+    sb.cdp.get("https://www.google.com/")
+    sb.sleep(RANDOM_SLEEP)
+    sb.sleep(6)    
+    sb.cdp.send_keys("APjFqb", "ogame\n")
+    sb.sleep(RANDOM_SLEEP)
+    sb.cdp.send_keys("APjFqb", "ogame wikipedia\n")
+    sb.sleep(RANDOM_SLEEP)
+    sb.cdp.click('h3:contains("OGame - Wikipedia, la enciclopedia libre")')
+    print('History Suscesfully!')
+    sb.sleep(RANDOM_SLEEP)
+    print('History fail!')
+    sb.sleep(RANDOM_SLEEP)
 
 
 def antibot_detection(sb):
-        url = "https://seleniumbase.io/antibot/login"
-        sb.activate_cdp_mode(url)
-        sb.cdp.sleep(RANDOM_SLEEP)
-        sb.press_keys("input#username", "demo_user")
-        sb.cdp.sleep(RANDOM_SLEEP)
-        sb.press_keys("input#password", "secret_pass")
-        x, y = sb.cdp.get_gui_element_center("button#myButton")
-        sb.cdp.sleep(RANDOM_SLEEP)
-        sb.uc_gui_click_x_y(x, y)
-        sb.sleep(1.5)
-        x, y = sb.cdp.get_gui_element_center("a#log-in")
-        sb.uc_gui_click_x_y(x, y)
-        sb.assert_text("Welcome!", "h1")
-        sb.cdp.sleep(RANDOM_SLEEP)
-        sb.set_messenger_theme(location="bottom_center")
-        sb.post_message("SeleniumBase wasn't detected!")
-        sb.cdp.sleep(RANDOM_SLEEP)
-        sb.sleep(15)
-        print("Bot detected!")
-        sb.cdp.sleep(15)
+    url = "https://seleniumbase.io/antibot/login"
+    sb.activate_cdp_mode(url)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.press_keys("input#username", "demo_user")
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.press_keys("input#password", "secret_pass")
+    x, y = sb.cdp.get_gui_element_center("button#myButton")
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.uc_gui_click_x_y(x, y)
+    sb.sleep(1.5)
+    x, y = sb.cdp.get_gui_element_center("a#log-in")
+    sb.uc_gui_click_x_y(x, y)
+    sb.assert_text("Welcome!", "h1")
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.set_messenger_theme(location="bottom_center")
+    sb.post_message("SeleniumBase wasn't detected!")
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.sleep(15)
+    print("Bot detected!")
+    sb.cdp.sleep(15)
 
 
 def browser_scan(sb):
-        url = "https://www.browserscan.net/bot-detection"
-        sb.activate_cdp_mode(url)
-        sb.sleep(1)
-        sb.cdp.flash("Test Results", duration=4)
-        sb.sleep(5)
-        sb.cdp.assert_element('strong:contains("Normal")')
-        sb.cdp.sleep(RANDOM_SLEEP)
-        sb.cdp.flash('strong:contains("Normal")', duration=4, pause=4)
-        sb.sleep(5)
-        print('Bot detected!')
-        sb.cdp.sleep(RANDOM_SLEEP)
+    url = "https://www.browserscan.net/bot-detection"
+    sb.activate_cdp_mode(url)
+    sb.sleep(1)
+    sb.cdp.flash("Test Results", duration=4)
+    sb.sleep(5)
+    sb.cdp.assert_element('strong:contains("Normal")')
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.flash('strong:contains("Normal")', duration=4, pause=4)
+    sb.sleep(5)
+    print('Bot detected!')
+    sb.cdp.sleep(RANDOM_SLEEP)
 
 
 def fingerprint(sb):
-        url = "https://demo.fingerprint.com/playground"
-        sb.activate_cdp_mode(url)
-        sb.sleep(1)
-        sb.cdp.highlight('a[href*="browser-bot-detection"]')
-        bot_row_selector = 'table:contains("Bot") tr:nth-of-type(3)'
-        print(sb.cdp.get_text(bot_row_selector))
-        sb.cdp.assert_text("Bot Not detected", bot_row_selector)
-        sb.cdp.highlight(bot_row_selector)
-        sb.sleep(2)
-        print('Bot detected!')
-        sb.cdp.sleep(RANDOM_SLEEP)
+    url = "https://demo.fingerprint.com/playground"
+    sb.activate_cdp_mode(url)
+    sb.sleep(1)
+    sb.cdp.highlight('a[href*="browser-bot-detection"]')
+    bot_row_selector = 'table:contains("Bot") tr:nth-of-type(3)'
+    print(sb.cdp.get_text(bot_row_selector))
+    sb.cdp.assert_text("Bot Not detected", bot_row_selector)
+    sb.cdp.highlight(bot_row_selector)
+    sb.sleep(2)
+    print('Bot detected!')
+    sb.cdp.sleep(RANDOM_SLEEP)
 
 
 # driver.close()
@@ -96,41 +97,35 @@ def checkLogin(sb):
 
 
 def isLogin(sb):
-    try:
-        sb.activate_cdp_mode(URL_OVERVIEW)
-        content = sb.cdp.find_element("#content")
-        if content:
-            print('IsLogin')
-            return True
-        else:
-            print('Isn`t Login')
-            return False
-    except:
+    sb.activate_cdp_mode(URL_OVERVIEW)
+    content = sb.cdp.find_element("#content")
+    if content:
+        print('IsLogin')
+        return True
+    else:
         print('Isn`t Login')
         return False
+    print('Isn`t Login')
+    return False
 
 
 def login(sb):
-    try:
-        print("Logueando...")
-        sb.activate_cdp_mode("http://srv220118-206152.vps.etecsa.cu/index.php")
-        sb.cdp.sleep(RANDOM_SLEEP)
-        try:
-            sb.cdp.send_keys('#username', USERNAME)
-            sb.cdp.sleep(RANDOM_SLEEP)
-            sb.cdp.send_keys('#password', PASSWORD)
-            sb.cdp.sleep(RANDOM_SLEEP)
-            sb.cdp.click_if_visible(LOGIN)
-            sb.sleep(6)
-            print("Logueado!")
-        except:
-            print("Try login again!")
-            sb.sleep(5)
-            checkLogin(sb)
-    except:
-        print('Try login again!')
-        sb.sleep(5)
-        checkLogin(sb)
+    print("Logueando...")
+    sb.activate_cdp_mode("http://srv220118-206152.vps.etecsa.cu/index.php")
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.send_keys('#username', USERNAME)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.send_keys('#password', PASSWORD)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.click_if_visible(LOGIN)
+    sb.sleep(6)
+    print("Logueado!")
+    print("Try login again!")
+    sb.sleep(5)
+    checkLogin(sb)
+    print('Try login again!')
+    sb.sleep(5)
+    checkLogin(sb)
 
 
 def main(SB):
