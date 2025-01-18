@@ -35,4 +35,4 @@ jobs:
         USERNAME: ${{ secrets.USERNAME }}
         PASSWORD: ${{ secrets.PASSWORD }}
       run: |
-        python examples/my_examples/sb_xnova_bot_wop_xnproyect.py --browser=chrome
+        python examples/my_examples/sb_xnova_bot_wop_xnproyect.py --browser=chrome --headless -v -s --junit-xml=junit/test-results.xml
