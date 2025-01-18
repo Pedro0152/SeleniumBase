@@ -1,28 +1,26 @@
 from seleniumbase import SB
-import requests
-import keyboard
 import random
-import csv
 import os
 
-URL_OVERVIEW ='http://srv220118-206152.vps.etecsa.cu/game.php?page=overview'
+URL_OVERVIEW = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=overview'
 URL_HASH = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=overview'
+LOGIN = "/html/body/section/div[2]/div/div[2]/div/div[2]/form/div[4]/button"
 
 TOKEN = os.environ["TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
 USERNAME = os.environ["USERNAME"]
 PASSWORD = os.environ["PASSWORD"]
 
-RANDOM_SLEEP = float(random.randint(40,80)/50)
+RANDOM_SLEEP = float(random.randint(40, 80) / 50)
 
-#MAIN BUTTONS:
+# MAIN BUTTONS:
 ESTRUCTURAS = 'span:contains("Estructuras")'
 TECNOLOGIAS = 'span:contains("Tecnologías")'
 FLOTAS = 'span:contains("Flotas")'
 DEFENSA = 'span:contains("Defensas")'
 RECURSOS = 'span:contains("Recursos")'
 
-        
+
 def realistic_browser_history(sb):
     try:
         sb.cdp.get("https://www.google.com/")
@@ -37,7 +35,6 @@ def realistic_browser_history(sb):
     except:
         print('History fail!')
         sb.sleep(RANDOM_SLEEP)
-        pass
 
 
 def antibot_detection(sb):
@@ -63,7 +60,6 @@ def antibot_detection(sb):
     except:
         print("Bot detected!")
         sb.cdp.sleep(15)
-        pass
 
 
 def browser_scan(sb):
@@ -98,7 +94,7 @@ def fingerprint(sb):
         sb.cdp.sleep(RANDOM_SLEEP)
 
 
-#driver.close()
+# driver.close()
 def checkLogin(sb):
     sb.cdp.sleep(6)
     if isLogin(sb):
@@ -123,7 +119,7 @@ def isLogin(sb):
 
 
 def login(sb):
-    try:# Navigate to the login page
+    try:
         print("Logueando...")
         sb.activate_cdp_mode("http://srv220118-206152.vps.etecsa.cu/index.php")
         sb.cdp.sleep(RANDOM_SLEEP)
@@ -132,7 +128,7 @@ def login(sb):
             sb.cdp.sleep(RANDOM_SLEEP)
             sb.cdp.send_keys('#password', PASSWORD)
             sb.cdp.sleep(RANDOM_SLEEP)
-            sb.cdp.click_if_visible("/html/body/section/div[2]/div/div[2]/div/div[2]/form/div[4]/button")
+            sb.cdp.click_if_visible(LOGIN)
             sb.sleep(6)
             print("Logueado!")
         except:
@@ -146,8 +142,8 @@ def login(sb):
 
 
 def main(SB):
-    with SB(uc=True,test=True) as sb:
-        #login(sb)
+    with SB(uc=True, test=True) as sb:
+        # login(sb)
         realistic_browser_history(sb)
 
 
