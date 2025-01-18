@@ -33,8 +33,6 @@ jobs:
 
     - name: Xnova bot script
       env:
-        TOKEN: ${{ secrets.TOKEN }}
-        CHAT_ID: ${{ secrets.CHAT_ID }}
         USERNAME: ${{ secrets.USERNAME }}
         PASSWORD: ${{ secrets.PASSWORD }}
       run: |
