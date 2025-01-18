@@ -17,12 +17,10 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-        
     - name: Install Chrome and Chrome Driver
       run: |
         choco install googlechrome -y
-        choco install chromedriver -y
-        
+        choco install chromedriver -y 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -32,10 +30,12 @@ jobs:
         pip install random
         pip install csv
         pip install os
-        
+
     - name: Xnova bot script
       env:
-        EMAIL: ${{ secrets.EMAIL }}
+        TOKEN: ${{ secrets.TOKEN }}
+        CHAT_ID: ${{ secrets.CHAT_ID }}
+        USERNAME: ${{ secrets.USERNAME }}
         PASSWORD: ${{ secrets.PASSWORD }}
       run: |
-        python sb_xnova_bot_wop_xnproyect.py
+        python examples/my_examples/sb_xnova_bot_wop_xnproyect.py --browser=chrome
