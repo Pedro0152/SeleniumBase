@@ -30,10 +30,13 @@ jobs:
         pip install random
         pip install csv
         pip install os
-
+    - name: Make sure pytest is working
+      run: |
+        echo "def test_1(): pass" > nothing.py
+        pytest nothing.py
     - name: Xnova bot script
       env:
         USERNAME: ${{ secrets.USERNAME }}
         PASSWORD: ${{ secrets.PASSWORD }}
       run: |
-        python examples/my_examples/sb_xnova_bot_wop_xnproyect.py --browser=chrome
+        pytest examples/my_examples/sb_xnova_bot_wop_xnproyect.py --browser=chrome
