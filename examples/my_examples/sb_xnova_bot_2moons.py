@@ -9,8 +9,10 @@ CHAT_ID = '1032943352'
 
 LOGIN_BUTTON = '/html/body/section/div[2]/div/div[2]/div/div[2]/form/div[4]/button'
 
-USERNAME = 'Aguacate'
-PASSWORD = 'Warehouse*13'
+TOKEN = os.environ["TOKEN"]
+CHAT_ID = os.environ["CHAT_ID"]
+USERNAME = os.environ["USERNAME"]
+PASSWORD = os.environ["PASSWORD"]
 
 RANDOM_SLEEP = float(random.randint(40,80)/50)
 
@@ -65,9 +67,41 @@ def login(sb):
     checkLogin(sb)
 
 
+def update_officier(sb):
+    sb.get("https://2moons.cu/game.php?page=officier")
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.click_if_visible('button[class="btn btn-primary btn-xs"]')
+    reclutar_buttons = sb.cdp.find_elements('button[class="btn btn-dm"]')
+    if check_MO(sb):
+        reclutar_buttons[0].click()
+        print('Officier updated!')
+    else:
+        pass
+
+
+def check_MO(sb):
+    mo_quantity = sb.cdp.get_text('div[class="res-text-921"]')
+    officer_required_mo = sb.cdp.find_elements('span[class="c-921"]')
+    geology_required_mo = int(officer_required_mo[0].text)
+    mo_quantity = int(get_numbers_from_string(mo_quantity))
+    print('MO quantity', mo_quantity)
+    print('officer_required_mo', officer_required_mo)
+    if mo_quantity >= geology_required_mo:
+        print('MO quantity is enough!')
+        return True
+    else:
+        print('MO quantity is not enough!')
+        return False
+    
+    
+def get_numbers_from_string(s):
+    return ''.join([char for char in s if char.isdigit()])
+
+
 def main(SB):
     with SB(uc=True,test=True) as sb:
         login(sb)
+        update_officier(sb)
         send_warning_voice_call(sb)
 
 
