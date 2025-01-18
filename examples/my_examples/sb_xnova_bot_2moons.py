@@ -1,4 +1,5 @@
 from seleniumbase import SB
+import random
 import os
 
 URL_OVERVIEW ='https://2moons.cu/game.php?page=overview'
