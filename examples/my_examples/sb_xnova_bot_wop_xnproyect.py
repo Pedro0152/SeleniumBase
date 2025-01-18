@@ -22,7 +22,6 @@ RECURSOS = 'span:contains("Recursos")'
 
 
 def realistic_browser_history(sb):
-    try:
         sb.cdp.get("https://www.google.com/")
         sb.sleep(RANDOM_SLEEP)
         sb.cdp.send_keys("APjFqb", "ogame\n")
@@ -32,7 +31,6 @@ def realistic_browser_history(sb):
         sb.cdp.click('h3:contains("OGame - Wikipedia, la enciclopedia libre")')
         print('History Suscesfully!')
         sb.sleep(RANDOM_SLEEP)
-    except:
         print('History fail!')
         sb.sleep(RANDOM_SLEEP)
 
