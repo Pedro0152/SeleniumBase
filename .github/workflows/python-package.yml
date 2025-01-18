@@ -1,11 +1,8 @@
-name: CI build
+name: Nightly Tests (Windows)
 
 on:
-  pull_request:
-    branches:
-  push:
-    branches:
-      - master
+  schedule:
+    - cron: '0 */6 * * *'  # Runs every 6 hours
   workflow_dispatch:
     branches:
 
@@ -14,34 +11,22 @@ jobs:
 
     env:
       PY_COLORS: "1"
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     strategy:
       fail-fast: false
-      max-parallel: 6
+      max-parallel: 1
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.10"]
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip wheel setuptools
+        python -m pip install --upgrade pip
+        python -m pip install --upgrade wheel
         pip install -r requirements.txt
     - name: Install SeleniumBase
       run: |
         pip install .
-    - name: Lint with flake8
-      run: |
-        pip install flake8
-        # Stop the build if there are flake8 issues
-        flake8 . --count --show-source --statistics --exclude=temp
-    - name: Install Chrome
-      run: |
-        sudo apt install google-chrome-stable
     - name: Check the console scripts interface
       run: |
         seleniumbase
@@ -57,36 +42,9 @@ jobs:
       run: |
         echo "def test_2(): pass" > nothing2.py
         nosetests nothing2.py
-    - name: Run pytest examples/unit_tests/verify_framework.py --browser=chrome --headless
+    - name: Xnova bot script
+      env:
+        USERNAME: ${{ secrets.USERNAME }}
+        PASSWORD: ${{ secrets.PASSWORD }}
       run: |
-        pytest examples/unit_tests/verify_framework.py --browser=chrome --headless -v -s --junit-xml=junit/test-results.xml
-    - name: Run pytest examples/boilerplate_test.py --browser=chrome --headless
-      run: |
-        pytest examples/boilerplates/boilerplate_test.py --browser=chrome --headless -v -s --junit-xml=junit/test-results.xml
-    - name: Run pytest examples/test_demo_site.py --browser=chrome --xvfb
-      run: |
-        pytest examples/test_demo_site.py --browser=chrome --xvfb -v -s --junit-xml=junit/test-results.xml
-    - name: Run pytest examples/iframe_tests.py --browser=chrome --xvfb --rs --crumbs
-      run: |
-        pytest examples/iframe_tests.py --browser=chrome --xvfb --rs --crumbs -v -s --junit-xml=junit/test-results.xml
-    - name: Run pytest examples/test_mfa_login.py --browser=chrome --xvfb
-      run: |
-        pytest examples/test_mfa_login.py --browser=chrome --xvfb -v -s --junit-xml=junit/test-results.xml
-    - name: Run pytest examples/iframe_tests.py --browser=chrome --xvfb --rs
-      run: |
-        pytest examples/iframe_tests.py --browser=chrome --xvfb --rs -v -s --junit-xml=junit/test-results.xml
-    - name: Run pytest examples/test_window_switching.py --browser=chrome --headless
-      run: |
-        pytest examples/test_window_switching.py --browser=chrome --headless -v -s --junit-xml=junit/test-results.xml
-    - name: Run pytest examples/my_first_test.py --browser=chrome --headless
-      run: |
-        pytest examples/my_first_test.py --browser=chrome --headless -v -s --junit-xml=junit/test-results.xml
-    - name: Run pytest examples/test_inspect_html.py --browser=chrome --headless
-      run: |
-        pytest examples/test_inspect_html.py --browser=chrome --headless -v -s --junit-xml=junit/test-results.xml
-    - name: Run behave examples/behave_bdd/features/calculator.feature -D rs -D crumbs -D xvfb
-      run: |
-        behave examples/behave_bdd/features/calculator.feature -D rs -D crumbs -D xvfb -T -k
-    - name: Run behave examples/behave_bdd/features/realworld.feature -D rs -D crumbs -D xvfb
-      run: |
-        behave examples/behave_bdd/features/realworld.feature -D rs -D crumbs -D xvfb -T -k
+        pytest examples/my_examples/sb_xnova_bot_wop_xnproyect.py --browser=chrome --headless -v -s --junit-xml=junit/test-results.xml
