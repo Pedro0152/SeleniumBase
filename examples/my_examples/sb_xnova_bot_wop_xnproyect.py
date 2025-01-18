@@ -22,14 +22,14 @@ RECURSOS = 'span:contains("Recursos")'
 
 
 def realistic_browser_history(sb):
-    url = "https://www.google.com/"
+    url = "https://google.com/ncr"
     sb.activate_cdp_mode(url)
     sb.cdp.sleep(RANDOM_SLEEP)
     sb.cdp.sleep(6)
-    sb.cdp.send_keys("APjFqb", "ogame\n")
+    sb.cdp.send_keys('[title="Search"]', "ogame\n")
     print('ogame Suscesfully!')
     sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.send_keys("APjFqb", "ogame wikipedia\n")
+    sb.cdp.send_keys('[title="Search"]', "ogame wikipedia\n")
     print('ogame wikipedia Suscesfully!')
     sb.cdp.sleep(RANDOM_SLEEP)
     sb.cdp.click('h3:contains("OGame - Wikipedia, la enciclopedia libre")')
