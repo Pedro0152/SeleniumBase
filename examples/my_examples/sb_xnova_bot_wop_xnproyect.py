@@ -22,18 +22,19 @@ RECURSOS = 'span:contains("Recursos")'
 
 
 def realistic_browser_history(sb):
-    sb.cdp.get("https://www.google.com/")
-    sb.sleep(RANDOM_SLEEP)
-    sb.sleep(6)    
+    url = "https://www.google.com/"
+    sb.activate_cdp_mode(url)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.sleep(6)
     sb.cdp.send_keys("APjFqb", "ogame\n")
-    sb.sleep(RANDOM_SLEEP)
+    print('ogame Suscesfully!')
+    sb.cdp.sleep(RANDOM_SLEEP)
     sb.cdp.send_keys("APjFqb", "ogame wikipedia\n")
-    sb.sleep(RANDOM_SLEEP)
+    print('ogame wikipedia Suscesfully!')
+    sb.cdp.sleep(RANDOM_SLEEP)
     sb.cdp.click('h3:contains("OGame - Wikipedia, la enciclopedia libre")')
     print('History Suscesfully!')
-    sb.sleep(RANDOM_SLEEP)
-    print('History fail!')
-    sb.sleep(RANDOM_SLEEP)
+    sb.cdp.sleep(RANDOM_SLEEP)
 
 
 def antibot_detection(sb):
