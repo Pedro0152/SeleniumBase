@@ -1,5 +1,8 @@
 from seleniumbase import SB
+import requests
+import keyboard
 import random
+import csv
 import os
 
 URL_OVERVIEW ='https://2moons.cu/game.php?page=overview'
@@ -9,10 +12,8 @@ CHAT_ID = '1032943352'
 
 LOGIN_BUTTON = '/html/body/section/div[2]/div/div[2]/div/div[2]/form/div[4]/button'
 
-TOKEN = os.environ["TOKEN"]
-CHAT_ID = os.environ["CHAT_ID"]
-USERNAME = os.environ["USERNAME"]
-PASSWORD = os.environ["PASSWORD"]
+USERNAME = 'Aguacate'
+PASSWORD = 'Warehouse*13'
 
 RANDOM_SLEEP = float(random.randint(40,80)/50)
 
@@ -22,7 +23,8 @@ TECNOLOGIAS = 'span:contains("Tecnologías")'
 FLOTAS = 'span:contains("Flotas")'
 DEFENSA = 'span:contains("Defensas")'
 RECURSOS = 'span:contains("Recursos")'
-
+OFICIAL_BUTTON = 'button:contains("Oficial")'
+RECLUTAR_BUTTON = '/html/body/div[6]/div/div[4]/div[1]/form/button'
 
 def send_warning_voice_call(sb):
     #'https://www.callmebot.com/blog/telegram-phone-call-using-your-browser/'
@@ -70,8 +72,8 @@ def login(sb):
 def update_officier(sb):
     sb.get("https://2moons.cu/game.php?page=officier")
     sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.click_if_visible('button[class="btn btn-primary btn-xs"]')
-    reclutar_buttons = sb.cdp.find_elements('button[class="btn btn-dm"]')
+    sb.cdp.click_if_visible(OFICIAL_BUTTON)
+    reclutar_buttons = sb.cdp.find_elements(RECLUTAR_BUTTON)
     if check_MO(sb):
         reclutar_buttons[0].click()
         print('Officier updated!')
@@ -82,10 +84,8 @@ def update_officier(sb):
 def check_MO(sb):
     mo_quantity = sb.cdp.get_text('div[class="res-text-921"]')
     officer_required_mo = sb.cdp.find_elements('span[class="c-921"]')
-    geology_required_mo = int(officer_required_mo[0].text)
-    mo_quantity = int(get_numbers_from_string(mo_quantity))
-    print('MO quantity', mo_quantity)
-    print('officer_required_mo', officer_required_mo)
+    geology_required_mo = float(officer_required_mo[0].text)
+    mo_quantity = float(get_numbers_from_string(mo_quantity) * 1000)
     if mo_quantity >= geology_required_mo:
         print('MO quantity is enough!')
         return True
