@@ -4,13 +4,12 @@ import os
 
 URL_OVERVIEW ='https://2moons.cu/game.php?page=overview'
 URL_HASH = 'https://2moons.cu/game.php?page=overview'
-TOKEN = '6198582894:AAF5CoOoqjdtuilFZ-uNi9flh7eqlv_yJBg'
-CHAT_ID = '1032943352'
-
 LOGIN_BUTTON = '/html/body/section/div[2]/div/div[2]/div/div[2]/form/div[4]/button'
 
-USERNAME = 'Aguacate'
-PASSWORD = 'Warehouse*13'
+TOKEN = os.environ["TOKEN"]
+CHAT_ID = os.environ["CHAT_ID"]
+USERNAME = os.environ["USERNAME"]
+PASSWORD = os.environ["PASSWORD"]
 
 RANDOM_SLEEP = float(random.randint(40,80)/50)
 
