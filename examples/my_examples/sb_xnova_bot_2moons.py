@@ -1,5 +1,4 @@
 from seleniumbase import SB
-import requests
 import random
 import os
 
