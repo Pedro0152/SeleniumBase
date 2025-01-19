@@ -9,8 +9,8 @@ LOGIN_BUTTON = '/html/body/section/div[2]/div/div[2]/div/div[2]/form/div[4]/butt
 
 TOKEN = os.environ["TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
-USERNAME = os.environ["USERNAME"]
-PASSWORD = os.environ["PASSWORD"]
+USERNAME = 'Aguacate'
+PASSWORD = 'Warehouse*13'
 
 RANDOM_SLEEP = float(random.randint(40,80)/50)
 
