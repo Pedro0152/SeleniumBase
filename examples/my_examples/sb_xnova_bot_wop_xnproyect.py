@@ -21,6 +21,18 @@ DEFENSA = 'span:contains("Defensas")'
 RECURSOS = 'span:contains("Recursos")'
 
 
+def send_warning_voice_call(sb):
+    #'https://www.callmebot.com/blog/telegram-phone-call-using-your-browser/'
+    print('Calling...')
+    sb.cdp.sleep(2)
+    #sb.cdp.get('https://www.callmebot.com/blog/telegram-phone-call-using-your-browser/')
+    #sb.cdp.sleep(3)
+    voice_call_url = 'http://api.callmebot.com/start.php?source=web&user=@Forrest01&text=You are under Attack !!!! You Are Under Attack !!!!&lang=en-US-Standard-B'
+    sb.cdp.get(voice_call_url)
+    sb.cdp.sleep(1)
+    print('Call Suscesfully!')
+
+
 def realistic_browser_history(sb):
     url = "https://google.com/ncr"
     sb.activate_cdp_mode(url)
@@ -90,7 +102,6 @@ def fingerprint(sb):
 
 # driver.close()
 def checkLogin(sb):
-    sb.cdp.sleep(6)
     if isLogin(sb):
         pass
     else:
@@ -99,6 +110,7 @@ def checkLogin(sb):
 
 def isLogin(sb):
     sb.activate_cdp_mode(URL_OVERVIEW)
+    sb.cdp.sleep(4)
     content = sb.cdp.find_element("#content")
     if content:
         print('IsLogin')
@@ -119,20 +131,15 @@ def login(sb):
     sb.cdp.send_keys('#password', PASSWORD)
     sb.cdp.sleep(RANDOM_SLEEP)
     sb.cdp.click_if_visible(LOGIN)
-    sb.sleep(6)
-    print("Logueado!")
-    print("Try login again!")
-    sb.sleep(5)
-    checkLogin(sb)
-    print('Try login again!')
-    sb.sleep(5)
+    sb.sleep(4)
     checkLogin(sb)
 
 
 def main(SB):
     with SB(uc=True, test=True) as sb:
-        # login(sb)
-        realistic_browser_history(sb)
+        #realistic_browser_history(sb)
+        login(sb)
+        send_warning_voice_call(sb)
 
 
 main(SB)

@@ -62,7 +62,7 @@ def login(sb):
     sb.cdp.send_keys('#password', PASSWORD)
     sb.cdp.sleep(RANDOM_SLEEP)
     sb.cdp.click_if_visible('[type="submit"]')
-    checkLogin(sb)
+    #checkLogin(sb)
 
 
 def update_officier(sb):
