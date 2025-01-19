@@ -1,4 +1,5 @@
 from seleniumbase import SB
+import requests
 import random
 import os
 
@@ -62,7 +63,7 @@ def login(sb):
     sb.cdp.send_keys('#password', PASSWORD)
     sb.cdp.sleep(RANDOM_SLEEP)
     sb.cdp.click_if_visible('[type="submit"]')
-    #checkLogin(sb)
+    checkLogin(sb)
 
 
 def update_officier(sb):
@@ -97,8 +98,11 @@ def get_numbers_from_string(s):
 def main(SB):
     with SB(uc=True,test=True) as sb:
         login(sb)
-        update_officier(sb)
-        send_warning_voice_call(sb)
+        # update_officier(sb)
+        message = 'Github Action Done!'
+        url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
+        print(requests.get(url).json())
+        # send_warning_voice_call(sb)
 
 
 main(SB)
