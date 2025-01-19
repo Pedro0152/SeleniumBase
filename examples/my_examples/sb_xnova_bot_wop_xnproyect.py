@@ -170,8 +170,8 @@ def login(sb):
 def main(SB):
     with SB(uc=True, test=True) as sb:
         # realistic_browser_history(sb)
-        login(sb)
-        checkAttack(sb)
+        # login(sb)
+        # checkAttack(sb)
         message = 'Github Action Done!'
         url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
         print(requests.get(url).json())
