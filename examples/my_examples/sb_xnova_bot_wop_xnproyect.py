@@ -21,12 +21,44 @@ DEFENSA = 'span:contains("Defensas")'
 RECURSOS = 'span:contains("Recursos")'
 
 
+def checkAttack(sb, TOKEN, CHAT_ID):
+    sb.cdp.get(URL_OVERVIEW)
+    print('Buscando ataques...')
+    sb.cdp.sleep(4)
+    alert = []
+    print('0')
+    alarm = sb.cdp.find_elements('span[class="flight attack"]')
+    sb.sleep(1)
+    if alarm:
+        print('Notificar ataque!')
+        notificar_ataque(sb, TOKEN, CHAT_ID)
+        print('Calling...')
+        sb.sleep(5)
+        # send_warning_voice_call(sb)
+        sb.cdp.get(URL_OVERVIEW)
+    else:
+        print('No hay ataques a la vista!')
+        sb.cdp.sleep(1)
+
+
+def notificar_ataque(sb, TOKEN, CHAT_ID):
+    sb.cdp.get(URL_OVERVIEW)
+    sb.cdp.sleep(2)
+    span_element = sb.cdp.find_element("attack")
+    if span_element:
+        message = span_element.text
+        url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
+        print(requests.get(url).json())
+    else:
+        print("No hay ataques a la vista!")
+
+
 def send_warning_voice_call(sb):
-    #'https://www.callmebot.com/blog/telegram-phone-call-using-your-browser/'
+    # 'https://www.callmebot.com/blog/telegram-phone-call-using-your-browser/'
     print('Calling...')
     sb.cdp.sleep(2)
-    #sb.cdp.get('https://www.callmebot.com/blog/telegram-phone-call-using-your-browser/')
-    #sb.cdp.sleep(3)
+    # sb.cdp.get('https://www.callmebot.com/blog/telegram-phone-call-using-your-browser/')
+    # sb.cdp.sleep(3)
     voice_call_url = 'http://api.callmebot.com/start.php?source=web&user=@Forrest01&text=You are under Attack !!!! You Are Under Attack !!!!&lang=en-US-Standard-B'
     sb.cdp.get(voice_call_url)
     sb.cdp.sleep(1)
@@ -137,9 +169,11 @@ def login(sb):
 
 def main(SB):
     with SB(uc=True, test=True) as sb:
-        #realistic_browser_history(sb)
+        # realistic_browser_history(sb)
         login(sb)
-        send_warning_voice_call(sb)
-
+        checkAttack(sb)
+        message = 'Github Action Done!'
+        url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
+        print(requests.get(url).json())
 
 main(SB)
