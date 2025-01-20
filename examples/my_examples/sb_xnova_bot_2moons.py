@@ -12,6 +12,11 @@ CHAT_ID = os.environ["CHAT_ID"]
 USERNAME = os.environ["USERNAME"]
 PASSWORD = os.environ["PASSWORD"]
 
+print('TOKEN:', TOKEN)
+print('CHAT_ID:', CHAT_ID)
+print('USERNAME:', USERNAME)
+print('PASSWORD:', PASSWORD)
+
 RANDOM_SLEEP = float(random.randint(40,80)/50)
 
 #MAIN BUTTONS:
