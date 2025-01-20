@@ -1,5 +1,11 @@
 name: Run Windows Bot
 
+env:
+  TOKEN: ${{ secrets.TOKEN }}
+  CHAT_ID: ${{ secrets.CHAT_ID }}
+  USERNAME: ${{ secrets.USERNAME }}
+  PASSWORD: ${{ secrets.PASSWORD }}
+
 on:
   workflow_dispatch:  # Allows manual trigger
   schedule:
@@ -30,10 +36,5 @@ jobs:
         pip install requests
 
     - name: Run python script
-      env:
-        TOKEN: ${{ secrets.TOKEN }}
-        CHAT_ID: ${{ secrets.CHAT_ID }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PASSWORD: ${{ secrets.PASSWORD }}
       run: |
         python examples/my_examples/sb_xnova_bot_2moons.py --browser=chrome
