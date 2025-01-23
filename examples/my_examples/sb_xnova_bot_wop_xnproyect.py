@@ -336,6 +336,24 @@ def sendFleet(sb):
     print('Fleet send!')
 
 
+def sendFleet(sb):
+    sb.cdp.get('http://srv220118-206152.vps.etecsa.cu/game.php?page=fleetTable&cp=1037')
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.get('http://srv220118-206152.vps.etecsa.cu/game.php?page=fleetTable&galaxy=2&system=177&planet=11&planettype=1&target_mission=7')
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.click_if_visible('a:contains("Todas las naves")')
+    sb.cdp.click_if_visible(CONTINUE)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.click(Metal_Max_Button)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.click(Crystal_Max_Button)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.click(Deuterium_Max_Button)
+    sb.cdp.click_if_visible(CONTINUE)
+    # sb.cdp.assert_text("Flota enviada", 'th[class="success"]')
+    print('Fleet send!')
+
+
 def checkEnergy(sb):
     energy = sb.cdp.find_elements(ENERGY)[3]
     energy_text = energy.text
