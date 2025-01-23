@@ -14,35 +14,68 @@ PASSWORD = os.environ["PASSWORD"]
 
 RANDOM_SLEEP = float(random.randint(40, 80) / 50)
 
-# MAIN BUTTONS:
+# BUTTONS:
 ESTRUCTURAS = 'span:contains("Estructuras")'
 TECNOLOGIAS = 'span:contains("Tecnologías")'
-FLOTAS = 'span:contains("Flotas")'
-DEFENSA = 'span:contains("Defensas")'
-RECURSOS = 'span:contains("Recursos")'
+FLEET = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=fleetTable'
+DEFENSE = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=defense'
+RESOURCE = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=resources'
+HANGAR = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=shipyard'
+BONUS = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=bonus&mode=bonushall'
+CONTINUE = 'input[value="Continuar"]'
 
+PLANETS = [248,117,267,391,638,1048,1340,1037] # 1037 -> Moon | MOON_PLANET -> 248
 
-def checkAttack(sb, TOKEN, CHAT_ID):
+Metal_Max_Button = "javascript:maxResource('metal');"
+Crystal_Max_Button = "javascript:maxResource('crystal');"
+Deuterium_Max_Button = "javascript:maxResource('deuterium');"
+
+ENERGY = 'span[class="res_current tooltip"]'
+
+CARGO_SHIP = 'input[name="fmenge[221]"]' 
+COLONIZER = 'input[name="fmenge[208]"]'
+SATELLITE = 'input[name="fmenge[212]"]'
+
+def checkAttack(sb):
     sb.cdp.get(URL_OVERVIEW)
     print('Buscando ataques...')
-    sb.cdp.sleep(4)
-    alert = []
+    sb.cdp.sleep(RANDOM_SLEEP)
     print('0')
-    alarm = sb.cdp.find_elements('span[class="flight attack"]')
-    sb.sleep(1)
-    if alarm:
+    # alarm = sb.cdp.find_element('span[class="flight attack"]', timeout=3)
+    attack_warning = 'span[class="flight attack"]'
+    attacks = sb.cdp.select_all(attack_warning, timeout=3)
+    if len(attacks) > 0:
         print('Notificar ataque!')
-        notificar_ataque(sb, TOKEN, CHAT_ID)
-        print('Calling...')
-        sb.sleep(5)
+        notificar_ataque(sb)
+        # print('Calling...')
         # send_warning_voice_call(sb)
         sb.cdp.get(URL_OVERVIEW)
+        sb.sleep(2)
     else:
         print('No hay ataques a la vista!')
-        sb.cdp.sleep(1)
+        pass
 
 
-def notificar_ataque(sb, TOKEN, CHAT_ID):
+def checkFleet(sb):
+    sb.cdp.get(URL_OVERVIEW)
+    print('Buscando Fleets...')
+    sb.cdp.sleep(RANDOM_SLEEP)
+    print('0')
+    colonize_warning = 'span[class="flight owndeploy"]'
+    colonizes = sb.cdp.select_all(colonize_warning)
+    print("cantidad:", len(colonizes))
+    if len(colonizes) > 0:
+        print('Notificar fleet!')
+        notificar_fleet(sb)
+        # print('Calling...')
+        # send_warning_voice_call(sb)
+        sb.cdp.get(URL_OVERVIEW)
+        sb.sleep(2)
+    else:
+        print('No hay fleets a la vista!')
+        pass
+
+def notificar_ataque(sb):
     sb.cdp.get(URL_OVERVIEW)
     sb.cdp.sleep(2)
     span_element = sb.cdp.find_element("attack")
@@ -52,6 +85,18 @@ def notificar_ataque(sb, TOKEN, CHAT_ID):
         print(requests.get(url).json())
     else:
         print("No hay ataques a la vista!")
+
+
+def notificar_fleet(sb):
+    sb.cdp.get(URL_OVERVIEW)
+    sb.cdp.sleep(2)
+    span_element = sb.cdp.find_element("colonize")
+    if span_element:
+        message = span_element.text
+        url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
+        print(requests.get(url).json())
+    else:
+        print("No hay fleets a la vista!")
 
 
 def send_warning_voice_call(sb):
@@ -133,26 +178,37 @@ def fingerprint(sb):
     sb.cdp.sleep(RANDOM_SLEEP)
 
 
-# driver.close()
-def checkLogin(sb):
-    if isLogin(sb):
-        pass
-    else:
-        login(sb)
+def checkLogin(sb, max_retries=3):
+    retries = 0
+    while retries < max_retries:
+        if isLogin(sb):
+            message = "Login successful!"
+            send_message(message)
+            print(message)
+            return True
+        else:
+            retries += 1
+            print(f"Attempt {retries} failed. Retrying...")
+            login(sb)
+    message = "Max retries reached. Login failed."
+    send_message(message)
+    print(message)
+    return False
 
 
 def isLogin(sb):
-    sb.activate_cdp_mode(URL_OVERVIEW)
-    sb.cdp.sleep(4)
-    content = sb.cdp.find_element("#content")
+    # sb.activate_cdp_mode(URL_OVERVIEW)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    content = sb.cdp.select("#content")
     if content:
-        print('IsLogin')
-        return True
+        message = 'IsLogin'
+        print(message)
+        isLogin = True
     else:
-        print('Isn`t Login')
-        return False
-    print('Isn`t Login')
-    return False
+        message = 'Isn`t Login'
+        print(message)
+        isLogin = False
+    return isLogin
 
 
 def login(sb):
@@ -165,14 +221,143 @@ def login(sb):
     sb.cdp.sleep(RANDOM_SLEEP)
     sb.cdp.click_if_visible(LOGIN)
     sb.sleep(4)
-    checkLogin(sb)
+    if not checkLogin(sb):
+        print("Failed to log in after multiple attempts.")
+    else:
+        print("Successfully logged in.")
+
+
+def send_message(message):
+    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
+    print(requests.get(url).json())
+
+
+def get_bonus(sb):
+    sb.cdp.get(BONUS)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.click('i[class="far fa-gem"]')
+    # href="game.php?page=bonus&mode=bonus"
+    sb.cdp.sleep(RANDOM_SLEEP)
+    date = sb.get_text('div[style="text-align: center; padding: 10px"]')
+    bonus_hour = date.split()[9]
+    print(f"Bonus hour: {bonus_hour}")
+    send_message(bonus_hour)
+    sb.cdp.sleep(2)
+
+
+def deployFleet(sb):
+    sb.cdp.get(FLEET)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.click('a[href="javascript:maxShips();"]')
+    # sb.cdp.type('input[name="ship221"]', 4)
+    sb.cdp.click_if_visible(CONTINUE)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.click_if_visible('a:contains("Luna(L)")')
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.click_if_visible('input[value="Continuar"]')
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.click_if_visible('input[type="radio"][value="4"]')
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.click_if_visible(Metal_Max_Button)
+    sb.cdp.click_if_visible(Crystal_Max_Button)
+    sb.cdp.click_if_visible(Deuterium_Max_Button)
+    sb.cdp.click_if_visible(CONTINUE)
+    sb.cdp.assert_text("Flota enviada", 'th[class="success"]')
+    print('Fleet deploy!')
+
+
+def buildShip(sb, ship_xpath):
+    sb.cdp.open(HANGAR)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.type(ship_xpath, '2\n')
+    sb.cdp.sleep(RANDOM_SLEEP)
+    print('Ship build!')
+
+
+def checkShip(sb, ship_xpath):
+    sb.cdp.get(FLEET)
+    exist_cargo_ship = sb.cdp.select(ship_xpath)
+    if exist_cargo_ship:
+        print('Ship exist!')
+        return True
+    else:
+        print('Ship not exist!')
+        return False
+
+
+def deployFleetInAllPlanets(sb):
+    for planet in PLANETS:
+        if planet != 1037 and planet != 248:
+            sb.cdp.get(f"http://srv220118-206152.vps.etecsa.cu/game.php?page=overview&cp={planet}")
+            sb.cdp.sleep(RANDOM_SLEEP)
+            checkEnergy(sb)
+            sb.cdp.sleep(RANDOM_SLEEP)
+            buildShip(sb, CARGO_SHIP)
+            sb.cdp.sleep(RANDOM_SLEEP)
+            deployFleet(sb)
+            sb.cdp.sleep(RANDOM_SLEEP)
+        elif planet != 1037:
+            sb.cdp.get(f"http://srv220118-206152.vps.etecsa.cu/game.php?page=overview&cp={planet}")
+            sb.cdp.sleep(RANDOM_SLEEP)
+            buildShip(sb, CARGO_SHIP)
+            sb.cdp.sleep(RANDOM_SLEEP)
+            buildShip(sb, COLONIZER)
+            sb.cdp.sleep(RANDOM_SLEEP)
+            deployFleet(sb)
+            sb.cdp.sleep(RANDOM_SLEEP)
+        else:
+            sendFleet(sb)
+
+
+def sendFleet(sb):
+    sb.cdp.get(FLEET)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.click_if_visible('a:contains("Todas las naves")')
+    sb.cdp.click_if_visible(CONTINUE)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.click_if_visible('a:contains("Luna(L)")')
+    sb.cdp.click_if_visible(CONTINUE)
+    sb.cdp.click_if_visible('input[type="radio"][value="4"]')
+    sb.cdp.type('input[name="planet"]', 11)
+    sb.cdp.select_option_by_text('/html/body/div[5]/div/div/div[2]/form/table[1]/tbody/tr[1]/td[2]/select/option[1]', 1)
+    sb.cdp.click_if_visible(CONTINUE)
+    sb.cdp.click_if_visible('input[type="radio"][value="7"]')
+    sb.cdp.click_if_visible(Metal_Max_Button)
+    sb.cdp.click_if_visible(Crystal_Max_Button)
+    sb.cdp.click_if_visible(Deuterium_Max_Button)
+    sb.cdp.click_if_visible(CONTINUE)
+    # sb.cdp.assert_text("Flota enviada", 'th[class="success"]')
+    print('Fleet send!')
+
+
+def checkEnergy(sb):
+    energy = sb.cdp.find_elements(ENERGY)[3]
+    energy_text = energy.text
+    print(energy_text)
+    energy_text = energy_text.split()[0]
+    print(energy_text)
+    if int(energy_text) < 0:
+        print('Energy is negative!')
+        buildSatellite(sb)
+    else:
+        print('Energy is positive!')
+
+
+def buildSatellite(sb):
+    sb.cdp.open(HANGAR)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.type(SATELLITE, '100\n')
+    sb.cdp.sleep(RANDOM_SLEEP)
+    print('Satellite build!')
 
 
 def main(SB):
     with SB(uc=True, test=True) as sb:
-        # realistic_browser_history(sb)
-        # login(sb)
+        login(sb)
+        # get_bonus(sb)
         # checkAttack(sb)
+        deployFleetInAllPlanets(sb)
+        checkFleet(sb)
         message = 'Github Action Done!'
         url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
         print(requests.get(url).json())
