@@ -258,9 +258,9 @@ def deployFleet(sb):
     sb.cdp.sleep(RANDOM_SLEEP)
     sb.cdp.click_if_visible('input[type="radio"][value="4"]')
     sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.click_if_visible(Metal_Max_Button)
-    sb.cdp.click_if_visible(Crystal_Max_Button)
-    sb.cdp.click_if_visible(Deuterium_Max_Button)
+    max_buttons = sb.cdp.fin_elements("a:contains('max')") 
+    for button in max_buttons:
+        sb.cdp.click(button)
     sb.cdp.click_if_visible(CONTINUE)
     sb.cdp.assert_text("Flota enviada", 'th[class="success"]')
     print('Fleet deploy!')
@@ -322,9 +322,9 @@ def sendFleet(sb):
     sb.cdp.select_option_by_text('/html/body/div[5]/div/div/div[2]/form/table[1]/tbody/tr[1]/td[2]/select/option[1]', 1)
     sb.cdp.click_if_visible(CONTINUE)
     sb.cdp.click_if_visible('input[type="radio"][value="7"]')
-    sb.cdp.click_if_visible(Metal_Max_Button)
-    sb.cdp.click_if_visible(Crystal_Max_Button)
-    sb.cdp.click_if_visible(Deuterium_Max_Button)
+    max_buttons = sb.cdp.fin_elements("a:contains('max')") 
+    for button in max_buttons:
+        sb.cdp.click(button)
     sb.cdp.click_if_visible(CONTINUE)
     # sb.cdp.assert_text("Flota enviada", 'th[class="success"]')
     print('Fleet send!')
@@ -335,8 +335,14 @@ def checkEnergy(sb):
     energy_text = energy.text
     print(energy_text)
     energy_text = energy_text.split()[0]
-    print(energy_text)
-    if float(energy_text) < 0:
+    try:
+        energy_number = energy_text.replace(",", ".")
+        print(energy_number)
+    except ValueError:
+        print("Invalid input: cannot convert to float.")
+    energy_number = float(energy_text)
+    print(energy_number)
+    if  energy_number < 0:
         print('Energy is negative!')
         buildSatellite(sb)
     else:
