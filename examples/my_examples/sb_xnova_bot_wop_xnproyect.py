@@ -336,7 +336,7 @@ def checkEnergy(sb):
     print(energy_text)
     energy_text = energy_text.split()[0]
     print(energy_text)
-    if int(energy_text) < 0:
+    if float(energy_text) < 0:
         print('Energy is negative!')
         buildSatellite(sb)
     else:
