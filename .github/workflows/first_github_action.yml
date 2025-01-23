@@ -9,7 +9,7 @@ env:
 on:
   workflow_dispatch:  # Allows manual trigger
   schedule:
-    - cron: '0 */2 * * *'  # Runs every 6 hours
+    - cron: '0 */22 * * *'  # Runs every 2 hours
 
 jobs:
   run-bot:
@@ -37,4 +37,4 @@ jobs:
 
     - name: Run python script
       run: |
-        python examples/my_examples/sb_xnova_bot_2moons.py --browser=chrome
+        python examples/my_examples/sb_xnova_bot_wop_xnproyect.py --browser=chrome
