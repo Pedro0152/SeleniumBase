@@ -90,7 +90,7 @@ def notificar_ataque(sb):
 def notificar_fleet(sb):
     sb.cdp.get(URL_OVERVIEW)
     sb.cdp.sleep(2)
-    span_element = sb.cdp.find_element("colonize")
+    span_element = sb.cdp.find_element("flight owndeploy")
     if span_element:
         message = span_element.text
         url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
