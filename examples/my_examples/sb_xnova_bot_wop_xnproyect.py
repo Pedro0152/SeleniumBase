@@ -12,7 +12,7 @@ CHAT_ID = os.environ["CHAT_ID"]
 USERNAME = os.environ["USERNAME"]
 PASSWORD = os.environ["PASSWORD"]
 
-RANDOM_SLEEP = float(random.randint(40, 80) / 50)
+RANDOM_SLEEP = float(random.randint(40, 100) / 50)
 
 # BUTTONS:
 ESTRUCTURAS = 'span:contains("Estructuras")'
@@ -24,11 +24,11 @@ HANGAR = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=shipyard'
 BONUS = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=bonus&mode=bonushall'
 CONTINUE = 'input[value="Continuar"]'
 
-PLANETS = [248,117,267,391,638,1048,1340,1037] # 1037 -> Moon | MOON_PLANET -> 248
+PLANETS = [248,117,267,391,638,1048,1037] # 1037 -> Moon | MOON_PLANET -> 248
 
-Metal_Max_Button = "javascript:maxResource('metal');"
-Crystal_Max_Button = "javascript:maxResource('crystal');"
-Deuterium_Max_Button = "javascript:maxResource('deuterium');"
+Metal_Max_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[1]/td[2]/a"
+Crystal_Max_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td[2]/a"
+Deuterium_Max_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[3]/td[2]/a"
 
 ENERGY = 'span[class="res_current tooltip"]'
 
@@ -258,10 +258,10 @@ def deployFleet(sb):
     sb.cdp.sleep(RANDOM_SLEEP)
     sb.cdp.click_if_visible('input[type="radio"][value="4"]')
     sb.cdp.sleep(RANDOM_SLEEP)
-    max_buttons = sb.cdp.fin_elements("td:contains('max')") 
-    for button in max_buttons:
-        sb.cdp.click(button)
-    sb.cdp.click_if_visible(CONTINUE)
+    sb.cdp.click(Metal_Max_Button)
+    sb.cdp.click(Crystal_Max_Button)
+    sb.cdp.click(Deuterium_Max_Button)
+    sb.cdp.click(CONTINUE)
     # sb.cdp.assert_text("Flota enviada", 'th[class="success"]')
     print('Fleet deploy!')
 
@@ -286,6 +286,7 @@ def checkShip(sb, ship_xpath):
 
 
 def deployFleetInAllPlanets(sb):
+    print('Deploy Fleet In All Planets!')
     for planet in PLANETS:
         if planet != 1037 and planet != 248:
             sb.cdp.get(f"http://srv220118-206152.vps.etecsa.cu/game.php?page=overview&cp={planet}")
@@ -298,13 +299,16 @@ def deployFleetInAllPlanets(sb):
             sb.cdp.sleep(RANDOM_SLEEP)
         elif planet != 1037:
             sb.cdp.get(f"http://srv220118-206152.vps.etecsa.cu/game.php?page=overview&cp={planet}")
-            sb.cdp.sleep(RANDOM_SLEEP)
-            buildShip(sb, CARGO_SHIP)
-            sb.cdp.sleep(RANDOM_SLEEP)
-            buildShip(sb, COLONIZER)
-            sb.cdp.sleep(RANDOM_SLEEP)
-            deployFleet(sb)
-            sb.cdp.sleep(RANDOM_SLEEP)
+            try:
+                sb.cdp.sleep(RANDOM_SLEEP)
+                buildShip(sb, CARGO_SHIP)
+                sb.cdp.sleep(RANDOM_SLEEP)
+                buildShip(sb, COLONIZER)
+                sb.cdp.sleep(RANDOM_SLEEP)
+                deployFleet(sb)
+                # sb.cdp.sleep(RANDOM_SLEEP)
+            except Exception:
+                print('Error in planet %s, no hay recursos para construir!' % planet)
         else:
             sendFleet(sb)
 
@@ -322,9 +326,11 @@ def sendFleet(sb):
     sb.cdp.select_option_by_text('/html/body/div[5]/div/div/div[2]/form/table[1]/tbody/tr[1]/td[2]/select/option[1]', 1)
     sb.cdp.click_if_visible(CONTINUE)
     sb.cdp.click_if_visible('input[type="radio"][value="7"]')
-    max_buttons = sb.cdp.fin_elements("td:contains('max')") 
-    for button in max_buttons:
-        sb.cdp.click(button)
+    sb.cdp.click(Metal_Max_Button)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.click(Crystal_Max_Button)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.click(Deuterium_Max_Button)
     sb.cdp.click_if_visible(CONTINUE)
     # sb.cdp.assert_text("Flota enviada", 'th[class="success"]')
     print('Fleet send!')
@@ -340,7 +346,7 @@ def checkEnergy(sb):
         print(energy_number)
     except ValueError:
         print("Invalid input: cannot convert to float.")
-    energy_number = float(energy_text)
+    energy_number = float(energy_number)
     print(energy_number)
     if  energy_number < 0:
         print('Energy is negative!')
