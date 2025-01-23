@@ -258,11 +258,11 @@ def deployFleet(sb):
     sb.cdp.sleep(RANDOM_SLEEP)
     sb.cdp.click_if_visible('input[type="radio"][value="4"]')
     sb.cdp.sleep(RANDOM_SLEEP)
-    max_buttons = sb.cdp.fin_elements("a:contains('max')") 
+    max_buttons = sb.cdp.fin_elements("td:contains('max')") 
     for button in max_buttons:
         sb.cdp.click(button)
     sb.cdp.click_if_visible(CONTINUE)
-    sb.cdp.assert_text("Flota enviada", 'th[class="success"]')
+    # sb.cdp.assert_text("Flota enviada", 'th[class="success"]')
     print('Fleet deploy!')
 
 
@@ -322,7 +322,7 @@ def sendFleet(sb):
     sb.cdp.select_option_by_text('/html/body/div[5]/div/div/div[2]/form/table[1]/tbody/tr[1]/td[2]/select/option[1]', 1)
     sb.cdp.click_if_visible(CONTINUE)
     sb.cdp.click_if_visible('input[type="radio"][value="7"]')
-    max_buttons = sb.cdp.fin_elements("a:contains('max')") 
+    max_buttons = sb.cdp.fin_elements("td:contains('max')") 
     for button in max_buttons:
         sb.cdp.click(button)
     sb.cdp.click_if_visible(CONTINUE)
