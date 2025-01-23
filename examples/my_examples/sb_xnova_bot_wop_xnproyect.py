@@ -313,27 +313,8 @@ def deployFleetInAllPlanets(sb):
             sendFleet(sb)
 
 
-def sendFleet(sb):
-    sb.cdp.get(FLEET)
-    sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.click_if_visible('a:contains("Todas las naves")')
-    sb.cdp.click_if_visible(CONTINUE)
-    sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.click_if_visible('a:contains("Luna(L)")')
-    sb.cdp.click_if_visible(CONTINUE)
-    sb.cdp.click_if_visible('input[type="radio"][value="4"]')
-    sb.cdp.type('input[name="planet"]', 11)
-    sb.cdp.select_option_by_text('/html/body/div[5]/div/div/div[2]/form/table[1]/tbody/tr[1]/td[2]/select/option[1]', 1)
-    sb.cdp.click_if_visible(CONTINUE)
-    sb.cdp.click_if_visible('input[type="radio"][value="7"]')
-    sb.cdp.click(Metal_Max_Button)
-    sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.click(Crystal_Max_Button)
-    sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.click(Deuterium_Max_Button)
-    sb.cdp.click_if_visible(CONTINUE)
-    # sb.cdp.assert_text("Flota enviada", 'th[class="success"]')
-    print('Fleet send!')
+
+
 
 
 def sendFleet(sb):
@@ -344,6 +325,8 @@ def sendFleet(sb):
     sb.cdp.click_if_visible('a:contains("Todas las naves")')
     sb.cdp.click_if_visible(CONTINUE)
     sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.click_if_visible(CONTINUE)
+    sb.sleep(RANDOM_SLEEP)
     sb.cdp.click(Metal_Max_Button)
     sb.cdp.sleep(RANDOM_SLEEP)
     sb.cdp.click(Crystal_Max_Button)
