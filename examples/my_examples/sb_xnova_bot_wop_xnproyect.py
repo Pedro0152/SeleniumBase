@@ -313,10 +313,6 @@ def deployFleetInAllPlanets(sb):
             sendFleet(sb)
 
 
-
-
-
-
 def sendFleet(sb):
     sb.cdp.get('http://srv220118-206152.vps.etecsa.cu/game.php?page=fleetTable&cp=1037')
     sb.cdp.sleep(RANDOM_SLEEP)
