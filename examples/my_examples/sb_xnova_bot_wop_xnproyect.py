@@ -303,8 +303,8 @@ def deployFleetInAllPlanets(sb):
                 sb.cdp.sleep(RANDOM_SLEEP)
                 buildShip(sb, CARGO_SHIP)
                 sb.cdp.sleep(RANDOM_SLEEP)
-                buildShip(sb, COLONIZER)
-                sb.cdp.sleep(RANDOM_SLEEP)
+                # buildShip(sb, COLONIZER)
+                # sb.cdp.sleep(RANDOM_SLEEP)
                 deployFleet(sb)
                 # sb.cdp.sleep(RANDOM_SLEEP)
             except Exception:
