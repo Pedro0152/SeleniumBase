@@ -12,7 +12,7 @@ CHAT_ID = os.environ["CHAT_ID"]
 USERNAME = os.environ["USERNAME"]
 PASSWORD = os.environ["PASSWORD"]
 
-RANDOM_SLEEP = float(random.randint(40, 100) / 50)
+RANDOM_SLEEP = float(random.randint(100, 200) / 50)
 
 # BUTTONS:
 ESTRUCTURAS = 'span:contains("Estructuras")'
