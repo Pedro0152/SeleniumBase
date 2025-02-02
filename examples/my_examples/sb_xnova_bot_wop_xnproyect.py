@@ -24,7 +24,7 @@ HANGAR = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=shipyard'
 BONUS = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=bonus&mode=bonushall'
 CONTINUE = 'input[value="Continuar"]'
 
-PLANETS = [248,117,267,391,638,1048,1037] # 1037 -> Moon | MOON_PLANET -> 248
+PLANETS = [248,117,267,391,638,1048] #  -> Moon | MOON_PLANET -> 
 
 Metal_Max_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[1]/td[2]/a"
 Crystal_Max_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td[2]/a"
@@ -252,7 +252,7 @@ def deployFleet(sb):
     # sb.cdp.type('input[name="ship221"]', 4)
     sb.cdp.click(CONTINUE)
     sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.click('a:contains("Luna(L)")')
+    sb.cdp.click('a:contains("Colonia [1:84:10]")')
     sb.cdp.sleep(RANDOM_SLEEP)
     sb.cdp.click('input[value="Continuar"]')
     sb.cdp.sleep(RANDOM_SLEEP)
