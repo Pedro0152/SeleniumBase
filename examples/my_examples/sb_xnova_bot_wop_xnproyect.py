@@ -50,7 +50,7 @@ SATELLITE = 'input[name="fmenge[212]"]'
 def makeBuilding(sb):
     # checkEnergy(sb)
     try:
-        sb.cdp.click(ESTRUCTURA)
+        sb.cdp.click(ESTRUCTURAS)
         Upgrade_Metal_Mine = sb.cdp.find_elements(Upgrade_Metal_Mine_Button)[0]
         sb.cdp.click(Upgrade_Metal_Mine)
         print("Upgraded Metal Mine")
