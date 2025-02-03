@@ -54,6 +54,7 @@ def makeBuilding(sb):
         # sb.cdp.get(URL_OVERVIEW)
         sb.cdp.sleep(RANDOM_SLEEP)
         sb.cdp.click(ESTRUCTURAS)
+        print("Edificios Clicked")
         Upgrade_Metal_Mine = sb.cdp.find_elements(Upgrade_Metal_Mine_Button)[0]
         sb.cdp.click(Upgrade_Metal_Mine)
         print("Upgraded Metal Mine")
