@@ -48,12 +48,14 @@ COLONIZER = 'input[name="fmenge[208]"]'
 SATELLITE = 'input[name="fmenge[212]"]'
 
 def makeBuilding(sb):
-    checkEnergy(sb)
+    # checkEnergy(sb)
     try:
+        sb.cdp.click(ESTRUCTURA)
         Upgrade_Metal_Mine = sb.cdp.find_elements(Upgrade_Metal_Mine_Button)[0]
         sb.cdp.click(Upgrade_Metal_Mine)
         print("Upgraded Metal Mine")
-    except Exception:
+    except Exception as e:
+        print("Exception: ",e)
         print("Upgrade Metal Mine Fail")
         pass
 
