@@ -14,7 +14,7 @@ PASSWORD = os.environ["PASSWORD"]
 
 RANDOM_SLEEP = float(random.randint(100, 200) / 50)
 
-# BUTTONS:
+# Main BUTTONS:
 ESTRUCTURAS = 'span:contains("Estructuras")'
 TECNOLOGIAS = 'span:contains("Tecnologías")'
 FLEET = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=fleetTable'
@@ -30,11 +30,37 @@ Metal_Max_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2
 Crystal_Max_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td[2]/a"
 Deuterium_Max_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[3]/td[2]/a"
 
+# Upgrade Building Buttons
+Energy_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[4]/td[2]/a"
+Upgrade_Metal_Mine_Button = 'button:contains("Ampliar al nivel")'
+Upgrade_Crystal_Mine_Button = 'button:contains("Ampliar al nivel")'
+Upgrade_Deuterium_Mine_Button = 'button:contains("Ampliar al nivel")'
+Upgrade_Robots_Button = 'button:contains("Ampliar al nivel")'
+Upgrade_Hangar_Button = 'span[class="build_submit construct_button"]'
+Upgrade_Metal_Warehouse_Button = 'span[class="build_submit construct_button"]'
+Upgrade_Crystal_Warehouse_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[9]/td[2]/a"
+Upgrade_Deuterium_Warehouse_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[10]/td[2]/a"
+
 ENERGY = 'span[class="res_current tooltip"]'
 
 CARGO_SHIP = 'input[name="fmenge[221]"]' 
 COLONIZER = 'input[name="fmenge[208]"]'
 SATELLITE = 'input[name="fmenge[212]"]'
+
+def makeBuilding(sb):
+    checkEnergy(sb)
+    try:
+        Upgrade_Metal_Mine = sb.cdp.find_elements(Upgrade_Metal_Mine_Button)[0]
+        sb.cdp.click(Upgrade_Metal_Mine)
+        print("Upgraded Metal Mine")
+    except Exception:
+        print("Upgrade Metal Mine Fail")
+        pass
+
+
+def checkResources(sb):
+    pass
+
 
 def checkAttack(sb):
     sb.cdp.get(URL_OVERVIEW)
@@ -235,13 +261,17 @@ def send_message(message):
 def get_bonus(sb):
     sb.cdp.get(BONUS)
     sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.click('i[class="far fa-gem"]')
+    try:
+        sb.cdp.click('i[class="far fa-gem"]')
+        print("get bonus")
+    except Exception:
+        print("get bonus fail")
     # href="game.php?page=bonus&mode=bonus"
-    sb.cdp.sleep(RANDOM_SLEEP)
-    date = sb.get_text('div[style="text-align: center; padding: 10px"]')
-    bonus_hour = date.split()[9]
-    print(f"Bonus hour: {bonus_hour}")
-    send_message(bonus_hour)
+        sb.cdp.sleep(RANDOM_SLEEP)
+        date = sb.get_text('div[style="text-align: center; padding: 10px"]')
+        bonus_hour = date.split()[9]
+        print(f"Bonus hour: {bonus_hour}")
+        send_message(bonus_hour)
     sb.cdp.sleep(2)
 
 
@@ -363,10 +393,11 @@ def buildSatellite(sb):
 def main(SB):
     with SB(uc=True, test=True) as sb:
         login(sb)
+        makeBuilding(sb)
         # get_bonus(sb)
         # checkAttack(sb)
-        deployFleetInAllPlanets(sb)
-        checkFleet(sb)
+        # deployFleetInAllPlanets(sb)
+        # checkFleet(sb)
         message = 'Github Action Done!'
         url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
         print(requests.get(url).json())
