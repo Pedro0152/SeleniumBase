@@ -15,7 +15,7 @@ PASSWORD = os.environ["PASSWORD"]
 RANDOM_SLEEP = float(random.randint(100, 200) / 50)
 
 # Main BUTTONS:
-ESTRUCTURAS = 'span:contains("Estructuras")'
+ESTRUCTURAS = 'span:contains("Edificios")'
 TECNOLOGIAS = 'span:contains("Tecnologías")'
 FLEET = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=fleetTable'
 DEFENSE = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=defense'
