@@ -50,6 +50,9 @@ SATELLITE = 'input[name="fmenge[212]"]'
 def makeBuilding(sb):
     # checkEnergy(sb)
     try:
+        sb.cdp.sleep(2)
+        sb.cdp.get(URL_OVERVIEW)
+        sb.cdp.sleep(RANDOM_SLEEP)
         sb.cdp.click(ESTRUCTURAS)
         Upgrade_Metal_Mine = sb.cdp.find_elements(Upgrade_Metal_Mine_Button)[0]
         sb.cdp.click(Upgrade_Metal_Mine)
