@@ -21,7 +21,7 @@ FLEET = "http://srv220118-206152.vps.etecsa.cu/game.php?page=fleetTable"
 DEFENSE = "http://srv220118-206152.vps.etecsa.cu/game.php?page=defense"
 RESOURCE = "http://srv220118-206152.vps.etecsa.cu/game.php?page=resources"
 HANGAR = "http://srv220118-206152.vps.etecsa.cu/game.php?page=shipyard"
-BONUS = "http://srv220118-206152.vps.etecsa.cu/game.php?page=bonus&mode=bonushall"
+BONUS = "http://srv220118-206152.vps.etecsa.cu/game.php?page=bonus&mode=bonus"
 OFFICER = "http://srv220118-206152.vps.etecsa.cu/game.php?page=officier"
 CONTINUE = 'input[value="Continuar"]'
 
@@ -73,9 +73,9 @@ def makeBuilding(sb):
 
 def try_click(sb, upgrade_building_button):
     try:
-        print("Building views")
         sb.cdp.click(upgrade_building_button)
         print("Upgraded Building")
+        sb.cdp.sleep(RANDOM_SLEEP)
     except Exception as e:
         print("Exception: ",e)
         print("Upgrade building Fail")
@@ -100,7 +100,7 @@ def checkAttack(sb):
         # print('Calling...')
         # send_warning_voice_call(sb)
         sb.cdp.get(URL_OVERVIEW)
-        sb.sleep(2)
+        sb.cdp.sleep(2)
     else:
         print('No hay ataques a la vista!')
         pass
@@ -120,7 +120,7 @@ def checkFleet(sb):
         # print('Calling...')
         # send_warning_voice_call(sb)
         sb.cdp.get(URL_OVERVIEW)
-        sb.sleep(2)
+        sb.cdp.sleep(2)
     else:
         print('No hay fleets a la vista!')
         pass
@@ -285,18 +285,6 @@ def send_message(message):
 def get_bonus(sb):
     sb.cdp.get(BONUS)
     sb.cdp.sleep(RANDOM_SLEEP)
-    try:
-        sb.cdp.click('i[class="far fa-gem"]')
-        print("get bonus")
-    except Exception:
-        print("get bonus fail")
-    # href="game.php?page=bonus&mode=bonus"
-        sb.cdp.sleep(RANDOM_SLEEP)
-        date = sb.get_text('div[style="text-align: center; padding: 10px"]')
-        bonus_hour = date.split()[9]
-        print(f"Bonus hour: {bonus_hour}")
-        send_message(bonus_hour)
-    sb.cdp.sleep(2)
 
 
 def deployFleet(sb):
@@ -409,7 +397,7 @@ def checkEnergy(sb):
 def buildSatellite(sb):
     sb.cdp.open(HANGAR)
     sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.type(SATELLITE, '100\n')
+    sb.cdp.type(SATELLITE, '10\n')
     sb.cdp.sleep(RANDOM_SLEEP)
     print('Satellite build!')
 
@@ -417,8 +405,8 @@ def buildSatellite(sb):
 def main(SB):
     with SB(uc=True, test=True) as sb:
         login(sb)
+        get_bonus(sb)
         makeBuilding(sb)
-        # get_bonus(sb)
         # checkAttack(sb)
         # deployFleetInAllPlanets(sb)
         # checkFleet(sb)
