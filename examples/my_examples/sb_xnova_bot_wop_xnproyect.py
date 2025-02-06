@@ -15,13 +15,14 @@ PASSWORD = os.environ["PASSWORD"]
 RANDOM_SLEEP = float(random.randint(100, 200) / 50)
 
 # Main BUTTONS:
-ESTRUCTURAS = 'span:contains("Edificios")'
-TECNOLOGIAS = 'span:contains("Tecnologías")'
-FLEET = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=fleetTable'
-DEFENSE = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=defense'
-RESOURCE = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=resources'
-HANGAR = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=shipyard'
-BONUS = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=bonus&mode=bonushall'
+ESTRUCTURAS = "http://srv220118-206152.vps.etecsa.cu/game.php?page=buildings"
+TECNOLOGIAS = "http://srv220118-206152.vps.etecsa.cu/game.php?page=research"
+FLEET = "http://srv220118-206152.vps.etecsa.cu/game.php?page=fleetTable"
+DEFENSE = "http://srv220118-206152.vps.etecsa.cu/game.php?page=defense"
+RESOURCE = "http://srv220118-206152.vps.etecsa.cu/game.php?page=resources"
+HANGAR = "http://srv220118-206152.vps.etecsa.cu/game.php?page=shipyard"
+BONUS = "http://srv220118-206152.vps.etecsa.cu/game.php?page=bonus&mode=bonushall"
+OFFICER = "http://srv220118-206152.vps.etecsa.cu/game.php?page=officier"
 CONTINUE = 'input[value="Continuar"]'
 
 PLANETS = [248,117,267,391,638,1048] #  -> Moon | MOON_PLANET -> 
@@ -31,17 +32,24 @@ Crystal_Max_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td
 Deuterium_Max_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[3]/td[2]/a"
 
 # Upgrade Building Buttons
-Energy_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[4]/td[2]/a"
-Upgrade_Metal_Mine_Button = 'button:contains("Ampliar al nivel")'
-Upgrade_Crystal_Mine_Button = 'button:contains("Ampliar al nivel")'
-Upgrade_Deuterium_Mine_Button = 'button:contains("Ampliar al nivel")'
 Upgrade_Robots_Button = 'button:contains("Ampliar al nivel")'
-Upgrade_Hangar_Button = 'span[class="build_submit construct_button"]'
-Upgrade_Metal_Warehouse_Button = 'span[class="build_submit construct_button"]'
-Upgrade_Crystal_Warehouse_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[9]/td[2]/a"
-Upgrade_Deuterium_Warehouse_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[10]/td[2]/a"
+Upgrade_Metal_Mine_Button = "/html/body/div[5]/div/div/div[3]/div/div[2]/div[2]/form/button"
+Upgrade_Crystal_Mine_Button = "/html/body/div[5]/div/div/div[4]/div/div[2]/div[2]/form/button"
+Upgrade_Deuterium_Mine_Button = "/html/body/div[5]/div/div/div[5]/div/div[2]/div[2]/form/button"
+Upgrade_Solar_Plant_Button = "/html/body/div[5]/div/div/div[6]/div/div[2]/div[2]/form/button"
+Upgrade_Robot_Factory_Button = "/html/body/div[5]/div/div/div[7]/div/div[2]/div[2]/form/button"
+Upgrade_Hangar_Button = '/html/body/div[5]/div/div/div[8]/div/div[2]/div[2]/form/button'
+Upgrade_Metal_Warehouse_Button = '/html/body/div[5]/div/div/div[9]/div/div[2]/div[2]/form/button'
+Upgrade_Crystal_Warehouse_Button = '/html/body/div[5]/div/div/div[10]/div/div[2]/div[2]/form/button'
+Upgrade_Deuterium_Warehouse_Button = '/html/body/div[5]/div/div/div[11]/div/div[2]/div[2]/form/button'
 
-ENERGY = 'span[class="res_current tooltip"]'
+Energy_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[4]/td[2]/a"
+
+METAL = 'span[class="res_current tooltip"]'[0]
+CRYSTAL = 'span[class="res_current tooltip"]'[1]
+DEUTERIUM = 'span[class="res_current tooltip"]'[2]
+ENERGY = 'span[class="res_current tooltip"]'[3]
+DARK_MATTER = 'span[class="res_current tooltip"]'[4]
 
 CARGO_SHIP = 'input[name="fmenge[221]"]' 
 COLONIZER = 'input[name="fmenge[208]"]'
@@ -49,18 +57,28 @@ SATELLITE = 'input[name="fmenge[212]"]'
 
 def makeBuilding(sb):
     # checkEnergy(sb)
+    sb.cdp.sleep(2)
+    # sb.cdp.get(URL_OVERVIEW)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    sb.cdp.get(ESTRUCTURAS)
+    try_click(sb, Upgrade_Metal_Mine_Button)
+    try_click(sb, Upgrade_Crystal_Mine_Button)
+    try_click(sb, Upgrade_Deuterium_Mine_Button)
+    try_click(sb, Upgrade_Solar_Plant_Button)
+    try_click(sb, Upgrade_Robot_Factory_Button)
+    try_click(sb, Upgrade_Metal_Warehouse_Button)
+    try_click(sb, Upgrade_Crystal_Warehouse_Button)
+    try_click(sb, Upgrade_Deuterium_Warehouse_Button)
+
+
+def try_click(sb, upgrade_building_button):
     try:
-        sb.cdp.sleep(2)
-        # sb.cdp.get(URL_OVERVIEW)
-        sb.cdp.sleep(RANDOM_SLEEP)
-        sb.cdp.click(ESTRUCTURAS)
-        print("Edificios Clicked")
-        Upgrade_Metal_Mine = sb.cdp.find_elements(Upgrade_Metal_Mine_Button)[0]
-        sb.cdp.click(Upgrade_Metal_Mine)
-        print("Upgraded Metal Mine")
+        print("Building views")
+        sb.cdp.click(upgrade_building_button)
+        print("Upgraded Building")
     except Exception as e:
         print("Exception: ",e)
-        print("Upgrade Metal Mine Fail")
+        print("Upgrade building Fail")
         pass
 
 
