@@ -45,18 +45,18 @@ Upgrade_Deuterium_Warehouse_Button = '/html/body/div[5]/div/div/div[11]/div/div[
 
 Energy_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[4]/td[2]/a"
 
-METAL = 'span[class="res_current tooltip"]'[0]
-CRYSTAL = 'span[class="res_current tooltip"]'[1]
-DEUTERIUM = 'span[class="res_current tooltip"]'[2]
-ENERGY = 'span[class="res_current tooltip"]'[3]
-DARK_MATTER = 'span[class="res_current tooltip"]'[4]
+METAL = 'span[class="res_current tooltip"]'
+CRYSTAL = 'span[class="res_current tooltip"]'
+DEUTERIUM = 'span[class="res_current tooltip"]'
+ENERGY = 'span[class="res_current tooltip"]'
+DARK_MATTER = 'span[class="res_current tooltip"]'
 
 CARGO_SHIP = 'input[name="fmenge[221]"]' 
 COLONIZER = 'input[name="fmenge[208]"]'
 SATELLITE = 'input[name="fmenge[212]"]'
 
 def makeBuilding(sb):
-    # checkEnergy(sb)
+    checkEnergy(sb)
     sb.cdp.sleep(2)
     # sb.cdp.get(URL_OVERVIEW)
     sb.cdp.sleep(RANDOM_SLEEP)
