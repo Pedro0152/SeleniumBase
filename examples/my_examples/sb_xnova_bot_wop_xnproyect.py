@@ -71,6 +71,24 @@ Crystal_Mine_Crystal_Cost = "/html/body/div[5]/div/div/div[4]/div/div[2]/div[1]/
 Deuterium_Mine_Metal_Cost = "/html/body/div[5]/div/div/div[5]/div/div[2]/div[1]/div[1]/b/span"
 Deuterium_Mine_Crystal_Cost = "/html/body/div[5]/div/div/div[5]/div/div[2]/div[1]/div[2]/b/span"
 
+# Investigation
+Tecnologia_de_Computacion = "/html/body/div[5]/div/div/div[3]/div/div[2]/div[2]/form/button"
+Tecnologia_de_Blindaje = "/html/body/div[5]/div/div/div[4]/div/div[2]/div[2]/form/button"
+Tecnologia_de_Energia = "/html/body/div[5]/div/div/div[5]/div/div[2]/div[2]/form/button"
+Tecnologia_de_Combustion = "/html/body/div[5]/div/div/div[6]/div/div[2]/div[2]/form/button"
+Tecnologia_de_Impulso = "/html/body/div[5]/div/div/div[3]/div/div[2]/div[2]/form/button"
+Tecnologia_de_ = "/"
+
+
+def upgradeInvestigation(sb):
+    sb.cdp.get(TECNOLOGIAS)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    try_click(sb, Tecnologia_de_Computacion)
+    try_click(sb, Tecnologia_de_Blindaje)
+    try_click(sb, Tecnologia_de_Energia)
+    try_click(sb, Tecnologia_de_Combustion)
+    try_click(sb, Tecnologia_de_Impulso)
+
 
 def makeBuilding(sb):
     checkEnergy(sb)
@@ -481,6 +499,7 @@ def main(SB):
         login(sb)
         get_bonus(sb)
         upgradeOfficer(sb, Upgrade_Geologist_Button)
+        upgradeInvestigation(sb)
         makeBuilding(sb)
         # checkAttack(sb)
         # deployFleetInAllPlanets(sb)
