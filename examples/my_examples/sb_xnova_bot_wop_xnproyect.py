@@ -43,17 +43,34 @@ Upgrade_Metal_Warehouse_Button = '/html/body/div[5]/div/div/div[9]/div/div[2]/di
 Upgrade_Crystal_Warehouse_Button = '/html/body/div[5]/div/div/div[10]/div/div[2]/div[2]/form/button'
 Upgrade_Deuterium_Warehouse_Button = '/html/body/div[5]/div/div/div[11]/div/div[2]/div[2]/form/button'
 
+# Dark Matter Officers
+Dark_Matter_Geologist = 'span[class="res_921_text"]'
+
+# Officers
+Upgrade_Geologist_Button = "/html/body/div[5]/div/div/div[13]/div/div[2]/div[2]/form/button"
+
 Energy_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[4]/td[2]/a"
 
+# Resources
 METAL = 'span[class="res_current tooltip"]'
 CRYSTAL = 'span[class="res_current tooltip"]'
 DEUTERIUM = 'span[class="res_current tooltip"]'
 ENERGY = 'span[class="res_current tooltip"]'
 DARK_MATTER = 'span[class="res_current tooltip"]'
 
+# Ships
 CARGO_SHIP = 'input[name="fmenge[221]"]' 
 COLONIZER = 'input[name="fmenge[208]"]'
 SATELLITE = 'input[name="fmenge[212]"]'
+
+# Resource costs
+Metal_Mine_Metal_cost = "/html/body/div[5]/div/div/div[3]/div/div[2]/div[1]/div[1]/b/span"
+Metal_Mine_Crystal_Cost = "/html/body/div[5]/div/div/div[3]/div/div[2]/div[1]/div[2]/b/span"
+Crystal_Mine_Metal_Cost = "/html/body/div[5]/div/div/div[4]/div/div[2]/div[1]/div[1]/b/span"
+Crystal_Mine_Crystal_Cost = "/html/body/div[5]/div/div/div[4]/div/div[2]/div[1]/div[2]/b/span"
+Deuterium_Mine_Metal_Cost = "/html/body/div[5]/div/div/div[5]/div/div[2]/div[1]/div[1]/b/span"
+Deuterium_Mine_Crystal_Cost = "/html/body/div[5]/div/div/div[5]/div/div[2]/div[1]/div[2]/b/span"
+
 
 def makeBuilding(sb):
     checkEnergy(sb)
@@ -74,16 +91,69 @@ def makeBuilding(sb):
 def try_click(sb, upgrade_building_button):
     try:
         sb.cdp.click(upgrade_building_button)
-        print("Upgraded Building")
+        print("Upgraded")
         sb.cdp.sleep(RANDOM_SLEEP)
     except Exception as e:
         print("Exception: ",e)
-        print("Upgrade building Fail")
+        print("Upgrade Fail")
         pass
 
 
-def checkResources(sb):
-    pass
+def checkResources(sb, resourceA, resourceB, placeResourceA):
+    resource = sb.cdp.find_elements(resourceA)[placeResourceA]
+    resource_text = resource.text
+    print(resource_text)
+    resource_text = resource_text.split()[0]
+    try:
+        resource_number = resource_text.replace(",", ".")
+        print(resource_number)
+    except ValueError:
+        print("Invalid input: cannot convert to float.")
+    resource_number = float(resource_number)
+    print(resource_number)
+    resourceB_text = resourceB.text
+    print(resource_text)
+    try:
+        resourceB_number = resourceB_text.replace(",", ".")
+        print(resourceB_number)
+    except ValueError:
+        print("Invalid input: cannot convert to float.")
+    resourceB_number = float(resourceB_number)
+    if resource_number > resourceB_number:
+        print("checkResource : True")
+        return True
+    else:
+        print("checkResource : False")
+        return False
+
+
+def checkDarkMatter(sb):
+    energy = sb.cdp.find_elements(ENERGY)[3]
+    energy_text = energy.text
+    print(energy_text)
+    energy_text = energy_text.split()[0]
+    try:
+        energy_number = energy_text.replace(",", ".")
+        print(energy_number)
+    except ValueError:
+        print("Invalid input: cannot convert to float.")
+    energy_number = float(energy_number)
+    print(energy_number)
+    if  energy_number < 0:
+        print('Energy is negative!')
+        buildSatellite(sb)
+    else:
+        print('Energy is positive!')
+
+
+def upgradeOfficer(sb, resourceA, resourceB, placeResourceA, officer):
+    sb.cdp.get(OFFICER)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    if checkResources(sb, resourceA, resourceB, placeResourceA):
+        try_click(sb, officer)
+    else:
+        print("Not enough dark matter to upgrade officer!")
+        pass
 
 
 def checkAttack(sb):
@@ -284,6 +354,7 @@ def send_message(message):
 
 def get_bonus(sb):
     sb.cdp.get(BONUS)
+    print("get Bonus")
     sb.cdp.sleep(RANDOM_SLEEP)
 
 
@@ -406,6 +477,7 @@ def main(SB):
     with SB(uc=True, test=True) as sb:
         login(sb)
         get_bonus(sb)
+        upgradeOfficer(sb,DARK_MATTER, Dark_Matter_Geologist, placeResourceA, Upgrade_Geologist_Button)
         makeBuilding(sb)
         # checkAttack(sb)
         # deployFleetInAllPlanets(sb)
