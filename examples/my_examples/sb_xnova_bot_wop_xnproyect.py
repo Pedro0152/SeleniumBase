@@ -170,7 +170,6 @@ def upgradeOfficer(sb, officer):
     sb.cdp.sleep(RANDOM_SLEEP)
     try:
         try_click(sb, officer, "Officer")
-        print("Officer Upgraded")
         sb.cdp.sleep(RANDOM_SLEEP)
     except Exception as e:
         print("Exception: ",e)
