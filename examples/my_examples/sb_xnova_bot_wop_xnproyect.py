@@ -74,10 +74,10 @@ Deuterium_Mine_Crystal_Cost = "/html/body/div[5]/div/div/div[5]/div/div[2]/div[1
 
 def makeBuilding(sb):
     checkEnergy(sb)
-    sb.cdp.sleep(2)
     # sb.cdp.get(URL_OVERVIEW)
     sb.cdp.sleep(RANDOM_SLEEP)
     sb.cdp.get(ESTRUCTURAS)
+    sb.cdp.sleep(2)
     try_click(sb, Upgrade_Metal_Mine_Button)
     try_click(sb, Upgrade_Crystal_Mine_Button)
     try_click(sb, Upgrade_Deuterium_Mine_Button)
@@ -146,15 +146,18 @@ def checkDarkMatter(sb):
         print('Energy is positive!')
 
 
-def upgradeOfficer(sb, resourceA, resourceB, placeResourceA, officer):
+def upgradeOfficer(sb, officer):
     sb.cdp.get(OFFICER)
     sb.cdp.sleep(RANDOM_SLEEP)
-    if checkResources(sb, resourceA, resourceB, placeResourceA):
+    try:
         try_click(sb, officer)
-    else:
+        print("Officer Upgraded")
+        sb.cdp.sleep(RANDOM_SLEEP)
+    except Exception as e:
+        print("Exception: ",e)
+        print("Upgrade Fail")
         print("Not enough dark matter to upgrade officer!")
         pass
-
 
 def checkAttack(sb):
     sb.cdp.get(URL_OVERVIEW)
@@ -477,7 +480,7 @@ def main(SB):
     with SB(uc=True, test=True) as sb:
         login(sb)
         get_bonus(sb)
-        upgradeOfficer(sb,DARK_MATTER, Dark_Matter_Geologist, placeResourceA, Upgrade_Geologist_Button)
+        upgradeOfficer(sb, Upgrade_Geologist_Button)
         makeBuilding(sb)
         # checkAttack(sb)
         # deployFleetInAllPlanets(sb)
