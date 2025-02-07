@@ -72,11 +72,11 @@ Deuterium_Mine_Metal_Cost = "/html/body/div[5]/div/div/div[5]/div/div[2]/div[1]/
 Deuterium_Mine_Crystal_Cost = "/html/body/div[5]/div/div/div[5]/div/div[2]/div[1]/div[2]/b/span"
 
 # Investigation
-Tecnologia_de_Computacion = "/html/body/div[5]/div/div/div[3]/div/div[2]/div[2]/form/button"
-Tecnologia_de_Blindaje = "/html/body/div[5]/div/div/div[4]/div/div[2]/div[2]/form/button"
-Tecnologia_de_Energia = "/html/body/div[5]/div/div/div[5]/div/div[2]/div[2]/form/button"
-Tecnologia_de_Combustion = "/html/body/div[5]/div/div/div[6]/div/div[2]/div[2]/form/button"
-Tecnologia_de_Impulso = "/html/body/div[5]/div/div/div[3]/div/div[2]/div[2]/form/button"
+Tecnologia_de_Computacion = "/html/body/div[5]/div/div/div[2]/div/div[2]/div[2]/form/button"
+Tecnologia_de_Blindaje = "/html/body/div[5]/div/div/div[3]/div/div[2]/div[2]/form/button"
+Tecnologia_de_Energia = "/html/body/div[5]/div/div/div[4]/div/div[2]/div[2]/form/button"
+Tecnologia_de_Combustion = "/html/body/div[5]/div/div/div[5]/div/div[2]/div[2]/form/button"
+Tecnologia_de_Impulso = "/html/body/div[5]/div/div/div[6]/div/div[2]/div[2]/form/button"
 Tecnologia_de_ = "/"
 
 
@@ -109,7 +109,8 @@ def makeBuilding(sb):
 def try_click(sb, upgrade_building_button):
     try:
         sb.cdp.click(upgrade_building_button)
-        print("Upgraded")
+        clicked = f'{upgrade_building_button}'
+        print("Upgraded", clicked)
         sb.cdp.sleep(RANDOM_SLEEP)
     except Exception as e:
         print("Exception: ",e)
