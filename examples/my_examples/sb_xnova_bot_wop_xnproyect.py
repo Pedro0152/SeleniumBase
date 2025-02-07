@@ -83,11 +83,11 @@ Tecnologia_de_ = "/"
 def upgradeInvestigation(sb):
     sb.cdp.get(TECNOLOGIAS)
     sb.cdp.sleep(RANDOM_SLEEP)
-    try_click(sb, Tecnologia_de_Computacion)
-    try_click(sb, Tecnologia_de_Blindaje)
-    try_click(sb, Tecnologia_de_Energia)
-    try_click(sb, Tecnologia_de_Combustion)
-    try_click(sb, Tecnologia_de_Impulso)
+    try_click(sb, Tecnologia_de_Computacion, 'Tecnology')
+    try_click(sb, Tecnologia_de_Blindaje, 'Tecnology')
+    try_click(sb, Tecnologia_de_Energia, 'Tecnology')
+    try_click(sb, Tecnologia_de_Combustion, 'Tecnology')
+    try_click(sb, Tecnologia_de_Impulso, 'Tecnology')
 
 
 def makeBuilding(sb):
@@ -96,25 +96,25 @@ def makeBuilding(sb):
     sb.cdp.sleep(RANDOM_SLEEP)
     sb.cdp.get(ESTRUCTURAS)
     sb.cdp.sleep(2)
-    try_click(sb, Upgrade_Metal_Mine_Button)
-    try_click(sb, Upgrade_Crystal_Mine_Button)
-    try_click(sb, Upgrade_Deuterium_Mine_Button)
-    try_click(sb, Upgrade_Solar_Plant_Button)
-    try_click(sb, Upgrade_Robot_Factory_Button)
-    try_click(sb, Upgrade_Metal_Warehouse_Button)
-    try_click(sb, Upgrade_Crystal_Warehouse_Button)
-    try_click(sb, Upgrade_Deuterium_Warehouse_Button)
+    try_click(sb, Upgrade_Metal_Mine_Button, 'Mine')
+    try_click(sb, Upgrade_Crystal_Mine_Button, 'Mine')
+    try_click(sb, Upgrade_Deuterium_Mine_Button, 'Mine')
+    try_click(sb, Upgrade_Solar_Plant_Button, 'Mine')
+    try_click(sb, Upgrade_Robot_Factory_Button, 'Mine')
+    try_click(sb, Upgrade_Metal_Warehouse_Button, 'Mine')
+    try_click(sb, Upgrade_Crystal_Warehouse_Button, 'Mine')
+    try_click(sb, Upgrade_Deuterium_Warehouse_Button, 'Mine')
 
 
-def try_click(sb, upgrade_building_button):
+def try_click(sb, upgrade_building_button, what_is_been_clicked:str = None):
     try:
         sb.cdp.click(upgrade_building_button)
-        clicked = f'{upgrade_building_button}'
-        print("Upgraded", clicked)
+        clicked = what_is_been_clicked
+        print(f"Upgraded {clicked}")
         sb.cdp.sleep(RANDOM_SLEEP)
     except Exception as e:
         print("Exception: ",e)
-        print("Upgrade Fail")
+        print(f"Upgrade {what_is_been_clicked} Fail")
         pass
 
 
@@ -169,7 +169,7 @@ def upgradeOfficer(sb, officer):
     sb.cdp.get(OFFICER)
     sb.cdp.sleep(RANDOM_SLEEP)
     try:
-        try_click(sb, officer)
+        try_click(sb, officer, "Officer")
         print("Officer Upgraded")
         sb.cdp.sleep(RANDOM_SLEEP)
     except Exception as e:
