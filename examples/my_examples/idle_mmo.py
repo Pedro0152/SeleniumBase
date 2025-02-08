@@ -6,7 +6,7 @@ import os
 TOKEN = os.environ["TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
 EMAIL = os.environ["EMAIL"]
-PASSWORD = os.environ["PASSWORD"]
+PASSWORD_IDLE_MMO = os.environ["PASSWORD_IDLE_MMO"]
 
 URL_LOGIN ='https://web.idle-mmo.com/login'
 URL_OVERVIEW = 'https://web.idle-mmo.com/@Kresh'
@@ -23,7 +23,7 @@ def login(sb):
     sb.activate_cdp_mode(URL_LOGIN)
     try:
         sb.cdp.press_keys(EMAIL_INPUT, EMAIL)
-        sb.cdp.press_keys(PASSWORD_INPUT, PASSWORD)
+        sb.cdp.press_keys(PASSWORD_INPUT, PASSWORD_IDLE_MMO)
         sb.cdp.click(SUBMIT_BUTTON)
         print('login!')
         sb.cdp.sleep(2)
