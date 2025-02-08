@@ -12,6 +12,7 @@ URL_LOGIN ='https://web.idle-mmo.com/login'
 URL_OVERVIEW = 'https://web.idle-mmo.com/@Kresh'
 URL_HASH = 'https://2moons.cu/game.php?page=overview'
 LOGIN_BUTTON = '/html/body/section/div[2]/div/div[2]/div/div[2]/form/div[4]/button'
+START = 'button:contains("Start")'
 
 # Login
 EMAIL_INPUT = 'input[id="email"]'
@@ -48,7 +49,7 @@ def woodcutting(sb):
     sb.cdp.open(WOODCUTTING)
     try:
         sb.cdp.click(SPRUCE_LOG)
-        sb.cdp.click(SUBMIT_BUTTON)
+        sb.cdp.click(START)
         print('Woodcutting')
     except Exception as e:
         print('Woodcutting fail', e)
