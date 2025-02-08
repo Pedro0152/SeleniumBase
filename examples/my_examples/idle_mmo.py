@@ -46,7 +46,8 @@ def get_daily_reward(sb):
         print('Daily Reward fail', e)
 
 def woodcutting(sb):
-    sb.cdp.open(WOODCUTTING)
+    sb.cdp.get(WOODCUTTING)
+    sb.cdp.sleep(2)
     try:
         sb.cdp.click(SPRUCE_LOG)
         sb.cdp.click(START)
