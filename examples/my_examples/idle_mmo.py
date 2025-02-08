@@ -17,7 +17,13 @@ LOGIN_BUTTON = '/html/body/section/div[2]/div/div[2]/div/div[2]/form/div[4]/butt
 EMAIL_INPUT = 'input[id="email"]'
 PASSWORD_INPUT = 'input[id="password"]'
 SUBMIT_BUTTON = 'button[type="submit"]'
-DAILY_REWARD = 'button[class="text-yellow-400"]'
+DAILY_REWARD = 'button[target="_blank"][class="text-yellow-400"]'
+
+# Skills
+WOODCUTTING = 'https://web.idle-mmo.com/skills/view/woodcutting'
+
+# Logs
+SPRUCE_LOG = 'span[class="truncate"]'
 
 def login(sb):
     sb.activate_cdp_mode(URL_LOGIN)
@@ -38,12 +44,22 @@ def get_daily_reward(sb):
     except Exception as e:
         print('Daily Reward fail', e)
 
+def woodcutting(sb):
+    sb.cdp.open(WOODCUTTING)
+    try:
+        sb.cdp.click(SPRUCE_LOG)
+        sb.cdp.click(SUBMIT_BUTTON)
+        print('Woodcutting')
+    except Exception as e:
+        print('Woodcutting fail', e)
+
 def main(SB):
     with SB(uc=True,test=True) as sb:
         login(sb)
         get_daily_reward(sb)
         sb.cdp.open(URL_OVERVIEW)
-        message = 'Github Action Done!'
+        woodcutting(sb)
+        message = 'Idle Mmo Github Action Done!'
         url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
         print(requests.get(url).json())
         # send_warning_voice_call(sb)
