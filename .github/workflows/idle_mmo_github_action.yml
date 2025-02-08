@@ -1,4 +1,4 @@
-name: Run Windows Bot
+name: Run idle mmo Windows Bot
 
 env:
   TOKEN: ${{ secrets.TOKEN }}
