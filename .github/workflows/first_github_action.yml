@@ -1,4 +1,4 @@
-name: Run Windows Bot
+name: Run Xnova cu Windows Bot
 
 env:
   TOKEN: ${{ secrets.TOKEN }}
