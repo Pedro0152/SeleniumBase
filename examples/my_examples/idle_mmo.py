@@ -16,7 +16,7 @@ LOGIN_BUTTON = '/html/body/section/div[2]/div/div[2]/div/div[2]/form/div[4]/butt
 # Login
 EMAIL_INPUT = 'input[id="email"]'
 PASSWORD_INPUT = 'input[id="password"]'
-SUBMIT_BUTTON = 'button[id="submit"]'
+SUBMIT_BUTTON = 'button[type="submit"]'
 DAILY_REWARD = 'button[class="text-yellow-400"]'
 
 def login(sb):
