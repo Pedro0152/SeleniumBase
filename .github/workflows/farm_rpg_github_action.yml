@@ -3,8 +3,8 @@ name: Run Farm Rpg Windows Bot
 env:
   TOKEN: ${{ secrets.TOKEN }}
   CHAT_ID: ${{ secrets.CHAT_ID }}
-  USERNAME: ${{ secrets.USERNAME }}
-  PASSWORD: ${{ secrets.PASSWORD }}
+  USERNAME_FARM_RPG: ${{ secrets.USERNAME_FARM_RPG }}
+  PASSWORD_FARM_RPG: ${{ secrets.PASSWORD_FARM_RPG }}
 
 on:
   workflow_dispatch:  # Allows manual trigger
