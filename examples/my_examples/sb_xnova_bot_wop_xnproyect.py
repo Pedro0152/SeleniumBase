@@ -55,7 +55,7 @@ Energy_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/t
 METAL = 'span[id="current_metal"]'
 CRYSTAL = 'span[id="current_crystal"]'
 DEUTERIUM = 'span[id="current_deuterium"]'
-ENERGY = '/html/body/div[3]/div[4]/div/div[2]/div[2]/span'
+ENERGY = '/html/body/div[3]/div[4]/div/div[2]/div[2]/span/span'
 DARK_MATTER = 'span[class="res_current tooltip"]'
 
 # Ships
