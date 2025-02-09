@@ -88,7 +88,6 @@ def harvest_all(sb):
     try:
         sb.cdp.mouse_click(HARVEST_ALL_CROPS)
         sb.cdp.sleep(1)
-        sb.cdp.mouse_click(OK)
         print('Harvest All')
     except Exception as e:
         print('Harvest All Fail', e)
@@ -138,7 +137,7 @@ def go_to_explore_area(sb, explore_area=None):
 
 def explore(sb):
     try:
-        sb.cdp.mouse_click(READY)
+        sb.cdp.mouse_click('div:contains("Continue")')
         sb.cdp.sleep(RANDOM__EXPLORER_SLEEP)
         print('Explore')
     except Exception as e:
@@ -157,7 +156,7 @@ def spend_stamina(sb):
 
 def harvest_is_ready(sb):
     try:
-        sb.cdp.mouse_click('span[class="ready"]')
+        sb.cdp.mouse_click(READY)
         print('Harvest is ready')
     except Exception as e:
         print('Harvest is not ready', e)
