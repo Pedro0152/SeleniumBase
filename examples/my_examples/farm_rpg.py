@@ -165,8 +165,7 @@ def harvest_is_ready(sb):
 def harvest(sb):
     if harvest_is_ready(sb):
         harvest_all(sb)
-    else:
-        print('Harvest is not ready')
+        plant_all(sb)
 
 def main(SB):
     with SB(uc=True,test=True) as sb:
