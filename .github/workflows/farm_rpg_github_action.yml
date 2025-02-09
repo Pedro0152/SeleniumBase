@@ -1,0 +1,40 @@
+name: Run Farm Rpg Windows Bot
+
+env:
+  TOKEN: ${{ secrets.TOKEN }}
+  CHAT_ID: ${{ secrets.CHAT_ID }}
+  USERNAME: ${{ secrets.USERNAME }}
+  PASSWORD: ${{ secrets.PASSWORD }}
+
+on:
+  workflow_dispatch:  # Allows manual trigger
+  schedule:
+    - cron: '0 */6 * * *'  # Runs every 6 hours
+
+jobs:
+  run-bot:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install Chrome and Chrome Driver
+      run: |
+        choco install googlechrome -y
+        choco install chromedriver -y 
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install seleniumbase
+        pip install requests
+
+    - name: Run python script
+      run: |
+        python examples/my_examples/farm_rpg.py --browser=chrome
