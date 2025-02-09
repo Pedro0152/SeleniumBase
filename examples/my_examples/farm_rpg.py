@@ -5,7 +5,7 @@ import os
 
 TOKEN = os.environ["TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
-USERNAME_FARM_RPG = os.environ["EMAIL_FARM_RPG"]
+USERNAME_FARM_RPG = os.environ["USERNAME_FARM_RPG"]
 PASSWORD_FARM_RPG = os.environ["PASSWORD_FARM_RPG"]
 
 URL_LOGIN ='https://farmrpg.com/index.php#!/login.php'
