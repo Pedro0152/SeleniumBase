@@ -20,6 +20,7 @@ RANDOM__EXPLORER_SLEEP = random.randint(8,18)/10
 YES = 'div:contains("Yes")'
 NO = 'div:contains("NO")'
 OK = 'span:contains("OK")'
+READY = 'span:contains("Ready")'
 
 # Login
 USERNAME = 'input[name="username"]'
@@ -79,7 +80,6 @@ def plant_all(sb):
         sb.cdp.mouse_click(PLANT_ALL_SELECT)
         sb.cdp.sleep(1)
         sb.cdp.mouse_click(YES)
-        sb.cdp.mouse_click(OK)
         print('Plant All')
     except Exception as e:
         print('Plant All Fail', e)
@@ -88,7 +88,6 @@ def harvest_all(sb):
     try:
         sb.cdp.mouse_click(HARVEST_ALL_CROPS)
         sb.cdp.sleep(1)
-        sb.cdp.mouse_click(YES)
         sb.cdp.mouse_click(OK)
         print('Harvest All')
     except Exception as e:
@@ -139,7 +138,7 @@ def go_to_explore_area(sb, explore_area=None):
 
 def explore(sb):
     try:
-        sb.cdp.mouse_click('div:contains("Continue")')
+        sb.cdp.mouse_click(READY)
         sb.cdp.sleep(RANDOM__EXPLORER_SLEEP)
         print('Explore')
     except Exception as e:
@@ -158,7 +157,7 @@ def spend_stamina(sb):
 
 def harvest_is_ready(sb):
     try:
-        sb.cdp.click('span[class="ready ready767753"]')
+        sb.cdp.mouse_click('span[class="ready"]')
         print('Harvest is ready')
     except Exception as e:
         print('Harvest is not ready', e)
