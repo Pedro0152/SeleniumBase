@@ -64,6 +64,7 @@ SMALL_CAVE = '/html/body/div[3]/div[3]/div[2]/div[2]/div/div/div[4]/div/div/ul/l
 
 def login(sb):
     sb.activate_cdp_mode(URL_LOGIN)
+    sb.cdp.sleep(3)
     try:
         sb.cdp.press_keys(USERNAME, USERNAME_FARM_RPG)
         sb.cdp.press_keys(PASSWORD, PASSWORD_FARM_RPG)
