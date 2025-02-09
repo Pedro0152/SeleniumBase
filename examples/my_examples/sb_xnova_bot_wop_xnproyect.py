@@ -55,7 +55,7 @@ Energy_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/t
 METAL = 'span[id="current_metal"]'
 CRYSTAL = 'span[id="current_crystal"]'
 DEUTERIUM = 'span[id="current_deuterium"]'
-ENERGY = '/html/body/div[3]/div[4]/div/div[2]/div[2]/span/span'
+ENERGY = 'span[class="res_current tooltip"]'
 DARK_MATTER = 'span[class="res_current tooltip"]'
 
 # Ships
@@ -468,7 +468,7 @@ def sendFleet(sb):
 
 
 def checkEnergy(sb):
-    energy = sb.cdp.find_elements(ENERGY)
+    energy = sb.cdp.find_elements(ENERGY)[3]
     energy_text = energy.text
     print(energy_text)
     energy_text = energy_text.split()[0]
