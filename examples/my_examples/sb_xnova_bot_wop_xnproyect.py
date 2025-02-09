@@ -468,7 +468,7 @@ def sendFleet(sb):
 
 
 def checkEnergy(sb):
-    energy = sb.cdp.find_elements(ENERGY)[3]
+    energy = sb.cdp.find_elements(ENERGY)[2]
     energy_text = energy.text
     print(energy_text)
     energy_text = energy_text.split()[0]
