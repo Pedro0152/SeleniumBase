@@ -52,10 +52,10 @@ Upgrade_Geologist_Button = "/html/body/div[5]/div/div/div[13]/div/div[2]/div[2]/
 Energy_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[4]/td[2]/a"
 
 # Resources
-METAL = 'span[class="res_current tooltip"]'
-CRYSTAL = 'span[class="res_current tooltip"]'
-DEUTERIUM = 'span[class="res_current tooltip"]'
-ENERGY = 'span[class="res_current tooltip"]'
+METAL = 'span[id="current_metal"]'
+CRYSTAL = 'span[id="current_crystal"]'
+DEUTERIUM = 'span[id="current_deuterium"]'
+ENERGY = '/html/body/div[3]/div[4]/div/div[2]/div[2]/span'
 DARK_MATTER = 'span[class="res_current tooltip"]'
 
 # Ships
@@ -147,7 +147,7 @@ def checkResources(sb, resourceA, resourceB, placeResourceA):
 
 
 def checkDarkMatter(sb):
-    energy = sb.cdp.find_elements(ENERGY)[3]
+    energy = sb.cdp.find_elements(DARK_MATTER)
     energy_text = energy.text
     print(energy_text)
     energy_text = energy_text.split()[0]
@@ -468,7 +468,7 @@ def sendFleet(sb):
 
 
 def checkEnergy(sb):
-    energy = sb.cdp.find_elements(ENERGY)[3]
+    energy = sb.cdp.find_elements(ENERGY)
     energy_text = energy.text
     print(energy_text)
     energy_text = energy_text.split()[0]
