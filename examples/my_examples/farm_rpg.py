@@ -62,6 +62,9 @@ PINE_SEEDS = 'button[data-name="Pine Seeds"]'
 
 # Explore Area
 SMALL_CAVE = '/html/body/div[3]/div[3]/div[2]/div[2]/div/div/div[4]/div/div/ul/li[1]/a/div/div[2]'
+SMALL_SPRING = '/html/body/div[3]/div[3]/div[2]/div[2]/div/div/div[4]/div/div/ul/li[2]/a/div/div[2]'
+HIGHLAND_HILLS = '/html/body/div[3]/div[3]/div[2]/div[2]/div/div/div[4]/div/div/ul/li[3]/a/div/div[2]'
+CANE_POLE_RIDGE = '/html/body/div[3]/div[3]/div[2]/div[2]/div/div/div[4]/div/div/ul/li[4]/a/div/div[2]'
 
 def login(sb):
     sb.activate_cdp_mode(URL_LOGIN)
@@ -132,7 +135,7 @@ def go_to_explore_area(sb, explore_area=None):
     sb.cdp.open(EXPLORE_THE_AREA)
     sb.cdp.refresh()
     sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.mouse_click(SMALL_CAVE)
+    sb.cdp.mouse_click(SMALL_SPRING)
     sb.cdp.sleep(RANDOM_SLEEP)
 
 def explore(sb):
@@ -171,8 +174,8 @@ def main(SB):
         login(sb)
         farm(sb)
         sell_crop(sb)
-        buy_crop(sb, CARROTS_SEEDS)
-        go_to_explore_area(sb, SMALL_CAVE)
+        buy_crop(sb, EGGPLANT_SEEDS)
+        go_to_explore_area(sb, SMALL_SPRING)
         spend_stamina(sb)
         harvest(sb)
         message = 'Farm RPG Github Action Done!'
