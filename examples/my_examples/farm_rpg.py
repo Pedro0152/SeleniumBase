@@ -112,7 +112,8 @@ def buy_crop(sb, seeds=None):
     sb.cdp.open(STORE)
     sb.cdp.refresh()
     try:
-        sb.cdp.mouse_click(seeds)
+        sb.cdp.sleep(2)
+        sb.cdp.click(seeds)
         sb.cdp.sleep(1)
         sb.cdp.mouse_click(YES)
         sb.cdp.mouse_click(OK)
