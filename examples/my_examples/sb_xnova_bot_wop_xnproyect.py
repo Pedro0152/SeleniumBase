@@ -77,17 +77,16 @@ Tecnologia_de_Blindaje = "/html/body/div[5]/div/div/div[3]/div/div[2]/div[2]/for
 Tecnologia_de_Energia = "/html/body/div[5]/div/div/div[4]/div/div[2]/div[2]/form/button"
 Tecnologia_de_Combustion = "/html/body/div[5]/div/div/div[5]/div/div[2]/div[2]/form/button"
 Tecnologia_de_Impulso = "/html/body/div[5]/div/div/div[6]/div/div[2]/div[2]/form/button"
-Tecnologia_de_ = "/"
-
+Tecnologia_de_Metal = "/html/body/div[5]/div/div/div[13]/div/div[2]/div[2]/form/button"
+Tecnologia_de_Crystal = "/html/body/div[5]/div/div/div[14]/div/div[2]/div[2]/form/button"
+Tecnologia_de_Deuterium = "/html/body/div[5]/div/div/div[15]/div/div[2]/div[2]/form/button"
 
 def upgradeInvestigation(sb):
     sb.cdp.get(TECNOLOGIAS)
     sb.cdp.sleep(RANDOM_SLEEP)
-    try_click(sb, Tecnologia_de_Computacion, 'Tecnology')
-    try_click(sb, Tecnologia_de_Blindaje, 'Tecnology')
-    try_click(sb, Tecnologia_de_Energia, 'Tecnology')
-    try_click(sb, Tecnologia_de_Combustion, 'Tecnology')
-    try_click(sb, Tecnologia_de_Impulso, 'Tecnology')
+    try_click(sb, Tecnologia_de_Metal, 'Tecnology')
+    try_click(sb, Tecnologia_de_Crystal, 'Tecnology')
+    try_click(sb, Tecnologia_de_Deuterium, 'Tecnology')
 
 
 def makeBuilding(sb):
