@@ -25,7 +25,7 @@ BONUS = "http://srv220118-206152.vps.etecsa.cu/game.php?page=bonus&mode=bonus"
 OFFICER = "http://srv220118-206152.vps.etecsa.cu/game.php?page=officier"
 CONTINUE = 'input[value="Continuar"]'
 
-PLANETS = [248,117,267,391,638,1048] #  -> Moon | MOON_PLANET -> 
+PLANETS = [43,363,364,365,471] #  -> Moon 471 | MOON_PLANET 365
 
 Metal_Max_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[1]/td[2]/a"
 Crystal_Max_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td[2]/a"
@@ -58,6 +58,12 @@ DEUTERIUM = 'span[id="current_deuterium"]'
 ENERGY = 'span[class="res_current tooltip"]'
 DARK_MATTER = 'span[class="res_current tooltip"]'
 
+# Resources quantity
+METAL_QUANTITY = 0
+CRYSTAL_QUANTITY = 0
+DEUTERIUM_QUANTITY = 0
+ENERGY_QUANTITY = 0
+
 # Ships
 CARGO_SHIP = 'input[name="fmenge[221]"]' 
 COLONIZER = 'input[name="fmenge[208]"]'
@@ -81,6 +87,30 @@ Tecnologia_de_Metal = "/html/body/div[5]/div/div/div[13]/div/div[2]/div[2]/form/
 Tecnologia_de_Crystal = "/html/body/div[5]/div/div/div[14]/div/div[2]/div[2]/form/button"
 Tecnologia_de_Deuterium = "/html/body/div[5]/div/div/div[15]/div/div[2]/div[2]/form/button"
 
+
+def goToTheEmpire(sb):
+    sb.cdp.get(URL_OVERVIEW)
+    sb.cdp.sleep(RANDOM_SLEEP)
+
+
+def getResourcesOfTheEmpire(sb):
+    sb.cdp.get(URL_OVERVIEW)
+    sb.cdp.sleep(RANDOM_SLEEP)
+
+
+def resourceOptimization(sb):
+    sb.cdp.get(URL_OVERVIEW)
+    sb.cdp.sleep(RANDOM_SLEEP)
+    # with the resource of the moon 
+    # and the level of the buildings 
+    # send the resources needed.
+
+
+def defensiveMode(sb):
+    sb.cdp.get(DEFENSE)
+    sb.cdp.sleep(RANDOM_SLEEP)
+
+
 def upgradeInvestigation(sb):
     sb.cdp.get(TECNOLOGIAS)
     sb.cdp.sleep(RANDOM_SLEEP)
@@ -89,8 +119,9 @@ def upgradeInvestigation(sb):
     try_click(sb, Tecnologia_de_Deuterium, 'Tecnology')
 
 
-def makeBuilding(sb):
-    checkEnergy(sb)
+def makeBuilding(sb, metal_qty, crystal_qty, deuterium_qty):
+    if not checkEnergy(sb) and crystal_qty > 2_000 and deuterium_qty > 500:
+        buildSatellite(sb)
     # sb.cdp.get(URL_OVERVIEW)
     sb.cdp.sleep(RANDOM_SLEEP)
     sb.cdp.get(ESTRUCTURAS)
@@ -117,33 +148,33 @@ def try_click(sb, upgrade_building_button, what_is_been_clicked:str = None):
         pass
 
 
-def checkResources(sb, resourceA, resourceB, placeResourceA):
-    resource = sb.cdp.find_elements(resourceA)[placeResourceA]
-    resource_text = resource.text
-    print(resource_text)
-    resource_text = resource_text.split()[0]
+def checkResource(sb, resource):
     try:
-        resource_number = resource_text.replace(",", ".")
+        resource = sb.cdp.find_element(resource)
+        resource_text = resource.text
+        resource_text = resource_text.split()
+        resource_number = resource_text[0]
         print(resource_number)
-    except ValueError:
-        print("Invalid input: cannot convert to float.")
-    resource_number = float(resource_number)
-    print(resource_number)
-    resourceB_text = resourceB.text
-    print(resource_text)
-    try:
-        resourceB_number = resourceB_text.replace(",", ".")
-        print(resourceB_number)
-    except ValueError:
-        print("Invalid input: cannot convert to float.")
-    resourceB_number = float(resourceB_number)
-    if resource_number > resourceB_number:
-        print("checkResource : True")
-        return True
-    else:
-        print("checkResource : False")
-        return False
-
+        resource_letter = resource_text[1]
+        print(resource_letter)
+        try:
+            resource_number = resource_number.replace(",", ".")
+            print(resource_number)
+        except ValueError:
+            print("Invalid input: cannot convert to float.")
+        resource_number = float(resource_number)
+        if resource_letter == 'M':
+            resource_number = resource_number * 1_000_000
+            return resource_number
+        elif resource_letter == 'K':
+            resource_number = resource_number * 1_000
+            return resource_number
+        else:
+            return resource_number
+    except Exception as e:
+        print("Exception: ",e)
+        print("Resource Fail")
+        pass
 
 def checkDarkMatter(sb):
     energy = sb.cdp.find_elements(DARK_MATTER)
@@ -180,10 +211,9 @@ def checkAttack(sb):
     sb.cdp.get(URL_OVERVIEW)
     print('Buscando ataques...')
     sb.cdp.sleep(RANDOM_SLEEP)
-    print('0')
     # alarm = sb.cdp.find_element('span[class="flight attack"]', timeout=3)
     attack_warning = 'span[class="flight attack"]'
-    attacks = sb.cdp.select_all(attack_warning, timeout=3)
+    attacks = sb.cdp.select_all(attack_warning, 4)
     if len(attacks) > 0:
         print('Notificar ataque!')
         notificar_ataque(sb)
@@ -323,7 +353,7 @@ def checkLogin(sb, max_retries=3):
     while retries < max_retries:
         if isLogin(sb):
             message = "Login successful!"
-            send_message(message)
+            # send_message(message)
             print(message)
             return True
         else:
@@ -363,6 +393,7 @@ def login(sb):
     sb.sleep(4)
     if not checkLogin(sb):
         print("Failed to log in after multiple attempts.")
+        sb.cdp.quit()
     else:
         print("Successfully logged in.")
 
@@ -379,33 +410,41 @@ def get_bonus(sb):
 
 
 def deployFleet(sb):
-    sb.cdp.get(FLEET)
-    sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.click('a[href="javascript:maxShips();"]')
-    # sb.cdp.type('input[name="ship221"]', 4)
-    sb.cdp.click(CONTINUE)
-    sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.click('a:contains("Colonia [1:84:10]")')
-    sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.click('input[value="Continuar"]')
-    sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.click('input[type="radio"][value="4"]')
-    sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.click(Metal_Max_Button)
-    sb.cdp.click(Crystal_Max_Button)
-    sb.cdp.click(Deuterium_Max_Button)
-    sb.cdp.click(CONTINUE)
-    # sb.cdp.assert_text("Flota enviada", 'th[class="success"]')
-    print('Fleet deploy!')
+    try:
+        sb.cdp.get(FLEET)
+        sb.cdp.sleep(RANDOM_SLEEP)
+        sb.cdp.click('a[href="javascript:maxShips();"]')
+        # sb.cdp.type('input[name="ship221"]', 4)
+        sb.cdp.click(CONTINUE)
+        sb.cdp.sleep(RANDOM_SLEEP)
+        sb.cdp.click('a:contains("Luna(L) [3:186:6]")')
+        sb.cdp.sleep(RANDOM_SLEEP)
+        sb.cdp.click('input[value="Continuar"]')
+        sb.cdp.sleep(RANDOM_SLEEP)
+        sb.cdp.click('input[type="radio"][value="4"]')
+        sb.cdp.sleep(RANDOM_SLEEP)
+        sb.cdp.click(Metal_Max_Button)
+        sb.cdp.click(Crystal_Max_Button)
+        sb.cdp.click(Deuterium_Max_Button)
+        sb.cdp.click(CONTINUE)
+        # sb.cdp.assert_text("Flota enviada", 'th[class="success"]')
+        print('Fleet deploy!')
+    except:
+        print('Fleet deploy Fail!')
+        pass
 
 
 def buildShip(sb, ship_xpath):
-    sb.cdp.open(HANGAR)
-    sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.type(ship_xpath, '2\n')
-    sb.cdp.sleep(RANDOM_SLEEP)
-    print('Ship build!')
-
+    try:
+        sb.cdp.open(HANGAR)
+        sb.cdp.sleep(RANDOM_SLEEP)
+        sb.cdp.type(ship_xpath, '2\n')
+        sb.cdp.sleep(RANDOM_SLEEP)
+        print('Ship build!')
+    except Exception as e:
+        print("Exception: ",e)
+        print("Build Fail")
+        pass
 
 def checkShip(sb, ship_xpath):
     sb.cdp.get(FLEET)
@@ -418,26 +457,36 @@ def checkShip(sb, ship_xpath):
         return False
 
 
-def deployFleetInAllPlanets(sb):
+def checkAllPlanets(sb):
     print('Deploy Fleet In All Planets!')
     for planet in PLANETS:
-        if planet != 1037 and planet != 248:
+        metal_qty = checkResource(sb, METAL)
+        print('metal_qty: ', metal_qty)
+        crystal_qty = checkResource(sb, CRYSTAL)
+        print('crystal_qty: ', crystal_qty)
+        deuterium_qty = checkResource(sb, DEUTERIUM)
+        print('deuterium_qty: ', deuterium_qty)
+        if planet != 471 and planet != 43:
             sb.cdp.get(f"http://srv220118-206152.vps.etecsa.cu/game.php?page=overview&cp={planet}")
+            makeBuilding(sb, metal_qty, crystal_qty, deuterium_qty)
             sb.cdp.sleep(RANDOM_SLEEP)
-            checkEnergy(sb)
-            sb.cdp.sleep(RANDOM_SLEEP)
-            buildShip(sb, CARGO_SHIP)
-            sb.cdp.sleep(RANDOM_SLEEP)
-            deployFleet(sb)
-            sb.cdp.sleep(RANDOM_SLEEP)
-        elif planet != 1037:
-            sb.cdp.get(f"http://srv220118-206152.vps.etecsa.cu/game.php?page=overview&cp={planet}")
-            try:
-                sb.cdp.sleep(RANDOM_SLEEP)
+            if metal_qty > 8_000 and crystal_qty > 8_000:
                 buildShip(sb, CARGO_SHIP)
                 sb.cdp.sleep(RANDOM_SLEEP)
-                buildShip(sb, COLONIZER)
+            deployFleet(sb)
+            sb.cdp.sleep(RANDOM_SLEEP)
+        elif planet != 471:
+            sb.cdp.get(f"http://srv220118-206152.vps.etecsa.cu/game.php?page=overview&cp={planet}")
+            try:
+                makeBuilding(sb, metal_qty, crystal_qty, deuterium_qty)
                 sb.cdp.sleep(RANDOM_SLEEP)
+                if metal_qty > 8_000 and crystal_qty > 8_000:
+                    buildShip(sb, CARGO_SHIP)
+                    sb.cdp.sleep(RANDOM_SLEEP)
+                sb.cdp.sleep(RANDOM_SLEEP)
+                if metal_qty > 10_000 and crystal_qty > 20_000 and deuterium_qty > 10_000:
+                    buildShip(sb, COLONIZER)
+                    sb.cdp.sleep(RANDOM_SLEEP)
                 deployFleet(sb)
                 # sb.cdp.sleep(RANDOM_SLEEP)
             except Exception:
@@ -447,50 +496,98 @@ def deployFleetInAllPlanets(sb):
 
 
 def sendFleet(sb):
-    sb.cdp.get('http://srv220118-206152.vps.etecsa.cu/game.php?page=fleetTable&cp=1037')
-    sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.get('http://srv220118-206152.vps.etecsa.cu/game.php?page=fleetTable&galaxy=2&system=177&planet=11&planettype=1&target_mission=7')
-    sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.click('a:contains("Todas las naves")')
-    sb.cdp.click(CONTINUE)
-    sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.click(CONTINUE)
-    sb.sleep(RANDOM_SLEEP)
-    sb.cdp.click(Metal_Max_Button)
-    sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.click(Crystal_Max_Button)
-    sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.click(Deuterium_Max_Button)
-    sb.cdp.click(CONTINUE)
-    # sb.cdp.assert_text("Flota enviada", 'th[class="success"]')
-    print('Fleet send!')
+    planet_id = random.choice([7,8,10])
+    try:
+        sb.cdp.get('http://srv220118-206152.vps.etecsa.cu/game.php?page=fleetTable&cp=471')
+        sb.cdp.sleep(RANDOM_SLEEP)
+        sb.cdp.get(f'http://srv220118-206152.vps.etecsa.cu/game.php?page=fleetTable&galaxy=3&system=186&planet={planet_id}&planettype=1&target_mission=7')
+        sb.cdp.sleep(RANDOM_SLEEP)
+        sb.cdp.click('a:contains("Todas las naves")')
+        sb.cdp.click(CONTINUE)
+        sb.cdp.sleep(RANDOM_SLEEP)
+        sb.cdp.click(CONTINUE)
+        sb.sleep(RANDOM_SLEEP)
+        sb.cdp.click(Metal_Max_Button)
+        sb.cdp.sleep(RANDOM_SLEEP)
+        sb.cdp.click(Crystal_Max_Button)
+        sb.cdp.sleep(RANDOM_SLEEP)
+        sb.cdp.click(Deuterium_Max_Button)
+        sb.cdp.sleep(RANDOM_SLEEP)
+        sb.cdp.click('input[type="radio"][value="4"]')
+        sb.cdp.click(CONTINUE)
+        # sb.cdp.assert_text("Flota enviada", 'th[class="success"]')
+        print('Fleet send!')
+    except Exception as e:
+        print("Exception: ",e)
+        print("Send Fleet Fail")
+        pass
 
 
 def checkEnergy(sb):
-    energy = sb.cdp.find_elements(ENERGY)[2]
-    energy_text = energy.text
-    print(energy_text)
-    energy_text = energy_text.split()[0]
     try:
-        energy_number = energy_text.replace(",", ".")
+        energy = sb.cdp.find_elements(ENERGY)[3]
+        energy_text = energy.text
+        print(energy_text)
+        energy_text = energy_text.split()[0]
+        try:
+            energy_number = energy_text.replace(",", ".")
+            print(energy_number)
+        except ValueError:
+            print("Invalid input: cannot convert to float.")
+        energy_number = float(energy_number)
         print(energy_number)
-    except ValueError:
-        print("Invalid input: cannot convert to float.")
-    energy_number = float(energy_number)
-    print(energy_number)
-    if  energy_number < 0:
-        print('Energy is negative!')
-        buildSatellite(sb)
-    else:
-        print('Energy is positive!')
+        if  energy_number < 0:
+            print('Energy is negative!')
+            return False
+        else:
+            print('Energy is positive!')
+            return True
+    except Exception as e:
+        print("Exception: ",e)
+        print("Check Energy Fail")
+        return False
 
 
 def buildSatellite(sb):
-    sb.cdp.open(HANGAR)
-    sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.type(SATELLITE, '10\n')
-    sb.cdp.sleep(RANDOM_SLEEP)
-    print('Satellite build!')
+    try:
+        sb.cdp.open(HANGAR)
+        sb.cdp.sleep(RANDOM_SLEEP)
+        sb.cdp.type(SATELLITE, '10\n')
+        sb.cdp.sleep(RANDOM_SLEEP)
+        print('Satellite build!')
+    except Exception as e:
+        print("Exception: ",e)
+        print("Build Satellite Fail")
+        pass
+
+
+def Resource(sb, resource, position):
+    try:
+        resource = sb.cdp.find_elements(resource)[position]
+        resource_text = resource.text
+        resource_text = resource_text.split()
+        resource_number = resource_text[0]
+        print(resource_number)
+        resource_letter = resource_text[1]
+        print(resource_letter)
+        try:
+            resource_number = resource_number.replace(",", ".")
+            print(resource_number)
+        except ValueError:
+            print("Invalid input: cannot convert to float.")
+        resource_number = float(resource_number)
+        if resource_letter == 'M':
+            resource_number = resource_number * 1_000_000
+            return resource_number
+        elif resource_letter == 'K':
+            resource_number = resource_number * 1_000
+            return resource_number
+        else:
+            return resource_number
+    except Exception as e:
+        print("Exception: ",e)
+        print("Resource Fail")
+        return 1_000_000
 
 
 def main(SB):
@@ -499,9 +596,13 @@ def main(SB):
         get_bonus(sb)
         upgradeOfficer(sb, Upgrade_Geologist_Button)
         upgradeInvestigation(sb)
-        makeBuilding(sb)
+        # makeBuilding(sb)
         # checkAttack(sb)
-        # deployFleetInAllPlanets(sb)
+        checkAllPlanets(sb)
+        # METAL_QUANTITY = checkResource(sb, METAL)
+        # CRYSTAL_QUANTITY = checkResource(sb, CRYSTAL)
+        # DEUTERIUM_QUANTITY = checkResource(sb, DEUTERIUM)
+        # checkResource(sb, ENERGY)
         # checkFleet(sb)
         message = 'Github Action Done!'
         url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
