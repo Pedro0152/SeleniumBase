@@ -54,7 +54,7 @@ ONION_SEEDS = 'button[data-name="Onion Seeds"]'
 HOPS_SEEDS = 'button[data-name="Hops Seeds"]'
 POTATO_SEEDS = 'button[data-name="Potato Seeds"]'
 TOMATO_SEEDS = 'button[data-name="Tomato Seeds"]'
-LEEK_SEEDS = 'button[data-id="51"]'
+LEEK_SEEDS = 'button[data-name="Leek Seeds"]'
 WATERMELON_SEEDS = 'button[data-name="Watermelon Seeds"]'
 CORN_SEEDS = 'button[data-name="Corn Seeds"]'
 CABBAGE_SEEDS = 'button[data-name="Cabbage Seeds"]'
@@ -175,7 +175,7 @@ def main(SB):
         login(sb)
         farm(sb)
         sell_crop(sb)
-        buy_crop(sb, LEEK_SEEDS)
+        buy_crop(sb, EGGPLANT_SEEDS)
         go_to_explore_area(sb, SMALL_SPRING)
         spend_stamina(sb)
         harvest(sb)
