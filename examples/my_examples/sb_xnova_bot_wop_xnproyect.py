@@ -471,7 +471,7 @@ def checkAllPlanets(sb):
             if metal_qty > 8_000 and crystal_qty > 8_000:
                 buildShip(sb, CARGO_SHIP)
                 sb.cdp.sleep(RANDOM_SLEEP)
-                makeBuilding(sb, metal_qty, crystal_qty, deuterium_qty)
+            makeBuilding(sb, metal_qty, crystal_qty, deuterium_qty)
             sb.cdp.sleep(RANDOM_SLEEP) 
             deployFleet(sb)
             sb.cdp.sleep(RANDOM_SLEEP)
