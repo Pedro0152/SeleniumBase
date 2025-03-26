@@ -175,7 +175,7 @@ def main(SB):
         login(sb)
         farm(sb)
         sell_crop(sb)
-        buy_crop(sb, EGGPLANT_SEEDS)
+        buy_crop(sb, LEEK_SEEDS)
         go_to_explore_area(sb, SMALL_SPRING)
         spend_stamina(sb)
         harvest(sb)
