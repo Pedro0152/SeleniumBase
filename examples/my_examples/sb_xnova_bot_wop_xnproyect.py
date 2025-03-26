@@ -468,17 +468,16 @@ def checkAllPlanets(sb):
         print('deuterium_qty: ', deuterium_qty)
         if planet != 471 and planet != 43:
             sb.cdp.get(f"http://srv220118-206152.vps.etecsa.cu/game.php?page=overview&cp={planet}")
-            makeBuilding(sb, metal_qty, crystal_qty, deuterium_qty)
-            sb.cdp.sleep(RANDOM_SLEEP)
             if metal_qty > 8_000 and crystal_qty > 8_000:
                 buildShip(sb, CARGO_SHIP)
                 sb.cdp.sleep(RANDOM_SLEEP)
+                makeBuilding(sb, metal_qty, crystal_qty, deuterium_qty)
+            sb.cdp.sleep(RANDOM_SLEEP) 
             deployFleet(sb)
             sb.cdp.sleep(RANDOM_SLEEP)
         elif planet != 471:
             sb.cdp.get(f"http://srv220118-206152.vps.etecsa.cu/game.php?page=overview&cp={planet}")
             try:
-                makeBuilding(sb, metal_qty, crystal_qty, deuterium_qty)
                 sb.cdp.sleep(RANDOM_SLEEP)
                 if metal_qty > 8_000 and crystal_qty > 8_000:
                     buildShip(sb, CARGO_SHIP)
@@ -487,6 +486,8 @@ def checkAllPlanets(sb):
                 if metal_qty > 10_000 and crystal_qty > 20_000 and deuterium_qty > 10_000:
                     buildShip(sb, COLONIZER)
                     sb.cdp.sleep(RANDOM_SLEEP)
+                makeBuilding(sb, metal_qty, crystal_qty, deuterium_qty)
+                sb.cdp.sleep(RANDOM_SLEEP) 
                 deployFleet(sb)
                 # sb.cdp.sleep(RANDOM_SLEEP)
             except Exception:
