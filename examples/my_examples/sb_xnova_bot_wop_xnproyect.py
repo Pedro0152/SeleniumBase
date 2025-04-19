@@ -25,7 +25,7 @@ BONUS = "http://srv220118-206152.vps.etecsa.cu/game.php?page=bonus&mode=bonus"
 OFFICER = "http://srv220118-206152.vps.etecsa.cu/game.php?page=officier"
 CONTINUE = 'input[value="Continuar"]'
 
-PLANETS = [43,363,364,365,471] #  -> Moon 471 | MOON_PLANET 365
+PLANETS = [43,363,364,365,635,638] #  -> Moon 635 | MOON_PLANET 365
 
 Metal_Max_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[1]/td[2]/a"
 Crystal_Max_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td[2]/a"
@@ -466,7 +466,7 @@ def checkAllPlanets(sb):
         print('crystal_qty: ', crystal_qty)
         deuterium_qty = checkResource(sb, DEUTERIUM)
         print('deuterium_qty: ', deuterium_qty)
-        if planet != 471 and planet != 43:
+        if planet != 635 and planet != 43:
             sb.cdp.get(f"http://srv220118-206152.vps.etecsa.cu/game.php?page=overview&cp={planet}")
             if metal_qty > 8_000 and crystal_qty > 8_000:
                 buildShip(sb, CARGO_SHIP)
@@ -475,7 +475,7 @@ def checkAllPlanets(sb):
             sb.cdp.sleep(RANDOM_SLEEP) 
             deployFleet(sb)
             sb.cdp.sleep(RANDOM_SLEEP)
-        elif planet != 471:
+        elif planet != 635:
             sb.cdp.get(f"http://srv220118-206152.vps.etecsa.cu/game.php?page=overview&cp={planet}")
             try:
                 sb.cdp.sleep(RANDOM_SLEEP)
@@ -499,7 +499,7 @@ def checkAllPlanets(sb):
 def sendFleet(sb):
     planet_id = random.choice([7,8,10])
     try:
-        sb.cdp.get('http://srv220118-206152.vps.etecsa.cu/game.php?page=fleetTable&cp=471')
+        sb.cdp.get('http://srv220118-206152.vps.etecsa.cu/game.php?page=fleetTable&cp=635')
         sb.cdp.sleep(RANDOM_SLEEP)
         sb.cdp.get(f'http://srv220118-206152.vps.etecsa.cu/game.php?page=fleetTable&galaxy=3&system=186&planet={planet_id}&planettype=1&target_mission=7')
         sb.cdp.sleep(RANDOM_SLEEP)
