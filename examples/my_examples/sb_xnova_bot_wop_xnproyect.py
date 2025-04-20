@@ -417,7 +417,7 @@ def deployFleet(sb):
         # sb.cdp.type('input[name="ship221"]', 4)
         sb.cdp.click(CONTINUE)
         sb.cdp.sleep(RANDOM_SLEEP)
-        sb.cdp.click('a:contains("Luna(L) [3:186:6]")')
+        sb.cdp.click('a:contains("Luna(L) [3:186:8]")')
         sb.cdp.sleep(RANDOM_SLEEP)
         sb.cdp.click('input[value="Continuar"]')
         sb.cdp.sleep(RANDOM_SLEEP)
