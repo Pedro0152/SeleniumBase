@@ -130,10 +130,6 @@ def makeBuilding(sb, metal_qty, crystal_qty, deuterium_qty):
     try_click(sb, Upgrade_Crystal_Mine_Button, 'Mine')
     try_click(sb, Upgrade_Deuterium_Mine_Button, 'Mine')
     try_click(sb, Upgrade_Solar_Plant_Button, 'Mine')
-    # try_click(sb, Upgrade_Robot_Factory_Button, 'Mine')
-    try_click(sb, Upgrade_Metal_Warehouse_Button, 'Mine')
-    try_click(sb, Upgrade_Crystal_Warehouse_Button, 'Mine')
-    try_click(sb, Upgrade_Deuterium_Warehouse_Button, 'Mine')
 
 
 def try_click(sb, upgrade_building_button, what_is_been_clicked:str = None):
