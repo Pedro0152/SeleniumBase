@@ -47,7 +47,7 @@ Upgrade_Deuterium_Warehouse_Button = '/html/body/div[5]/div/div/div[11]/div/div[
 Dark_Matter_Geologist = 'span[class="res_921_text"]'
 
 # Officers
-Upgrade_Geologist_Button = "/html/body/div[5]/div/div/div[13]/div/div[2]/div[2]/form/button"
+Upgrade_Geologist_Button = "/html/body/div[5]/div/div/div[13]/div/div[2]/div[2]"
 
 Energy_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[4]/td[2]/a"
 
