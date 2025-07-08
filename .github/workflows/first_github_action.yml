@@ -27,7 +27,7 @@ jobs:
     - name: Install Chrome and Chrome Driver
       run: |
         choco install googlechrome --version=135.0.7049.96 -y --allow-downgrade
-        choco install chromedriver -y 
+        choco install chromedriver --version=135.0.7049.114 -y --allow-downgrade
 
     - name: Install dependencies
       run: |
