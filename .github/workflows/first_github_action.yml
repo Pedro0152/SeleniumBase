@@ -13,7 +13,7 @@ on:
 
 jobs:
   run-bot:
-    runs-on: windows-2022
+    runs-on: windows-latest
     
     steps:
     - name: Checkout repository
@@ -26,8 +26,9 @@ jobs:
 
     - name: Install Chrome and Chrome Driver
       run: |
-        choco install googlechrome -y
-        choco install chromedriver -y
+        choco uninstall googlechrome -y --ignore-dependencies
+        choco install googlechrome --version=135.0.7049.96 -y --allow-downgrade --ignore-checksums
+        choco install chromedriver --version=135.0.7049.114 -y --allow-downgrade
 
     - name: Install dependencies
       run: |
