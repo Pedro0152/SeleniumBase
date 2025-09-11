@@ -1,0 +1,67 @@
+from seleniumbase import SB
+import requests
+import random
+import os
+
+URL_OVERVIEW = 'https://www.simcompanies.com/'
+URL_HASH = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=overview'
+LOGIN = "/html/body/section/div[2]/div/div[2]/div/div[2]/form/div[4]/button"
+RANDOM_SLEEP = float(random.randint(100, 200) / 50)
+
+# Main BUTTONS:
+ESTRUCTURAS = "http://srv220118-206152.vps.etecsa.cu/game.php?page=buildings"
+ACCEPT_COOKIE = 'class="css-uyxdsm btn btn-lg btn-secondary"'
+WAREHOUSE = "https://www.simcompanies.com/headquarters/warehouse/"
+MARKET = "https://www.simcompanies.com/market/resource/1/"
+SELL_POWER = "https://www.simcompanies.com/headquarters/warehouse/power/sell/"
+
+def login(sb):
+    print("Logueando...")
+    sb.activate_cdp_mode(URL_OVERVIEW)
+    print("Clicking...")
+    sb.cdp.click('button:contains("Essential Only")')
+    print("Clicked...")
+    sb.cdp.click('a:contains("Sign in")')
+    print("Signing in...")
+    sb.cdp.press_keys('input[name="email"]', 'kresh0152@gmail.com')
+    sb.cdp.send_keys('input[name="password"]', 'Warehouse*13\n')
+    print("Logged in...")
+    sb.cdp.sleep(4)
+
+def get_resources(sb):
+    for i in range(1, 12):
+        try:
+            sb.cdp.click(f'/html/body/div[1]/div/div[2]/div[3]/div/div[1]/div/div/a[{i}]/div[3]')
+            print("Clicked on resources...")
+        except:
+            print("No resources to click...")
+            pass
+
+def sell_resources(sb):
+    print("Selling resources...")
+    cheapest_price = get_cheapest_price(sb) - 0.001
+    sb.cdp.open('https://www.simcompanies.com/headquarters/warehouse/power/sell/')
+    sb.cdp.click('button:contains("All")')
+    sb.cdp.send_keys('input[name="price"]', str(cheapest_price) + '\n')
+    print("Selled resources at price...", cheapest_price)
+
+def get_cheapest_price(sb):
+    print("Getting cheapest price...")
+    sb.cdp.open('https://www.simcompanies.com/market/resource/1/')
+    prices = sb.cdp.find_elements('span[class="css-fcl27u"]')
+    cheapest_price = prices[0].text
+    cheapest_price = float(cheapest_price.replace('$', ''))
+    print("Cheapest price...", cheapest_price)
+    return cheapest_price
+
+def main(SB):
+    with SB(uc=True) as sb:
+        login(sb)
+        get_resources(sb)
+        sell_resources(sb)
+        sb.cdp.sleep(5)
+        message = 'Sim Companies Done!'
+        url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
+        print(requests.get(url).json())
+
+main(SB)
