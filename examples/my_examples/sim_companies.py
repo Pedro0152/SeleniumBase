@@ -8,6 +8,11 @@ URL_HASH = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=overview'
 LOGIN = "/html/body/section/div[2]/div/div[2]/div/div[2]/form/div[4]/button"
 RANDOM_SLEEP = float(random.randint(100, 200) / 50)
 
+TOKEN = os.environ["TOKEN"]
+CHAT_ID = os.environ["CHAT_ID"]
+USERNAME = os.environ["USERNAME_SIM_COMPANIES"]
+PASSWORD = os.environ["PASSWORD__SIM_COMPANIES"]
+
 # Main BUTTONS:
 ESTRUCTURAS = "http://srv220118-206152.vps.etecsa.cu/game.php?page=buildings"
 ACCEPT_COOKIE = 'class="css-uyxdsm btn btn-lg btn-secondary"'
