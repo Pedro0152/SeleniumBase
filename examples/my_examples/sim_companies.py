@@ -43,28 +43,40 @@ def get_resources(sb):
             pass
 
 def sell_resources(sb):
-    print("Selling resources...")
-    cheapest_price = get_cheapest_price(sb) - 0.001
-    sb.cdp.open('https://www.simcompanies.com/headquarters/warehouse/power/sell/')
-    sb.cdp.click('button:contains("All")')
-    sb.cdp.send_keys('input[name="price"]', str(cheapest_price) + '\n')
-    print("Selled resources at price...", cheapest_price)
+    try:
+      print("Selling resources...")
+      cheapest_price = get_cheapest_price(sb) - 0.001
+      sb.cdp.open('https://www.simcompanies.com/headquarters/warehouse/power/sell/')
+      sb.cdp.click('button:contains("All")')
+      sb.cdp.send_keys('input[name="price"]', str(cheapest_price) + '\n')
+      print("Selled resources at price...", cheapest_price)
+    except:
+      print("sell_resources Fail!")
+      message = 'sell_resources Fail!'
+      url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
+      print(requests.get(url).json())
 
 def get_cheapest_price(sb):
-    print("Getting cheapest price...")
-    sb.cdp.open('https://www.simcompanies.com/market/resource/1/')
-    prices = sb.cdp.find_elements('span[class="css-fcl27u"]')
-    cheapest_price = prices[0].text
-    cheapest_price = float(cheapest_price.replace('$', ''))
-    print("Cheapest price...", cheapest_price)
-    return cheapest_price
+    try:
+      print("Getting cheapest price...")
+      sb.cdp.open('https://www.simcompanies.com/market/resource/1/')
+      prices = sb.cdp.find_elements('span[class="css-fcl27u"]')
+      cheapest_price = prices[0].text
+      cheapest_price = float(cheapest_price.replace('$', ''))
+      print("Cheapest price...", cheapest_price)
+      return cheapest_price
+    except:
+      print("sell_resources Fail!")
+      message = 'sell_resources Fail!'
+      url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
+      print(requests.get(url).json())
 
 def main(SB):
     with SB(uc=True) as sb:
         login(sb)
         get_resources(sb)
         sell_resources(sb)
-        sb.cdp.sleep(5)
+        sb.cdp.sleep(2)
         message = 'Sim Companies Done!'
         url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
         print(requests.get(url).json())
