@@ -21,11 +21,11 @@ MARKET = "https://www.simcompanies.com/market/resource/1/"
 SELL_POWER = "https://www.simcompanies.com/headquarters/warehouse/power/sell/"
 
 def login(sb):
-    print("Logueando...")
+    print("Log in...")
     sb.activate_cdp_mode(URL_OVERVIEW)
-    print("Clicking...")
-    sb.cdp.click('button:contains("Essential Only")')
-    print("Clicked...")
+    # print("Clicking...")
+    # sb.cdp.click('button:contains("Essential Only")')
+    # print("Clicked...")
     sb.cdp.click('a:contains("Sign in")')
     print("Signing in...")
     sb.cdp.press_keys('input[name="email"]', 'kresh0152@gmail.com')
