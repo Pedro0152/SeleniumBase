@@ -11,7 +11,7 @@ RANDOM_SLEEP = float(random.randint(100, 200) / 50)
 TOKEN = os.environ["TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
 USERNAME = os.environ["USERNAME_SIM_COMPANIES"]
-PASSWORD = os.environ["PASSWORD__SIM_COMPANIES"]
+PASSWORD = os.environ["PASSWORD_SIM_COMPANIES"]
 
 # Main BUTTONS:
 ESTRUCTURAS = "http://srv220118-206152.vps.etecsa.cu/game.php?page=buildings"
