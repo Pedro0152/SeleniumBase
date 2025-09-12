@@ -4,7 +4,6 @@ import random
 import os
 
 URL_OVERVIEW = 'https://www.simcompanies.com/'
-URL_HASH = 'http://srv220118-206152.vps.etecsa.cu/game.php?page=overview'
 LOGIN = "/html/body/section/div[2]/div/div[2]/div/div[2]/form/div[4]/button"
 RANDOM_SLEEP = float(random.randint(100, 200) / 50)
 
@@ -14,7 +13,6 @@ USERNAME = os.environ["USERNAME_SIM_COMPANIES"]
 PASSWORD = os.environ["PASSWORD_SIM_COMPANIES"]
 
 # Main BUTTONS:
-ESTRUCTURAS = "http://srv220118-206152.vps.etecsa.cu/game.php?page=buildings"
 ACCEPT_COOKIE = 'class="css-uyxdsm btn btn-lg btn-secondary"'
 WAREHOUSE = "https://www.simcompanies.com/headquarters/warehouse/"
 MARKET = "https://www.simcompanies.com/market/resource/1/"
@@ -26,7 +24,14 @@ def login(sb):
     # print("Clicking...")
     # sb.cdp.click('button:contains("Essential Only")')
     # print("Clicked...")
-    sb.cdp.click('a:contains("Sign in")')
+    try:
+      sb.cdp.click('a:contains("Sign in")')
+    except:
+      print("Sign in failed...trying again")
+      try:
+        sb.cdp.click('a:contains("Iniciar sesión")')
+      except:
+        print("Iniciar sesión failed")
     print("Signing in...")
     sb.cdp.press_keys('input[name="email"]', 'kresh0152@gmail.com')
     sb.cdp.send_keys('input[name="password"]', 'Warehouse*13\n')
