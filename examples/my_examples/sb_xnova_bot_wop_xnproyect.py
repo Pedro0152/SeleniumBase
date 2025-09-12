@@ -453,6 +453,22 @@ def checkShip(sb, ship_xpath):
         return False
 
 
+def buildSatellite(sb):
+    try:
+        sb.cdp.open(HANGAR)
+        if not warningMessage(sb):
+            sb.cdp.sleep(RANDOM_SLEEP)
+            sb.cdp.type(SATELLITE, '10\n')
+            sb.cdp.sleep(RANDOM_SLEEP)
+            print('Satellite build!')
+        else:
+            pass
+    except Exception as e:
+        print("Exception: ",e)
+        print("Build Satellite Fail")
+        pass
+
+
 def checkAllPlanets(sb):
     print('Deploy Fleet In All Planets!')
     for planet in PLANETS:
@@ -545,16 +561,19 @@ def checkEnergy(sb):
         return False
 
 
-def buildSatellite(sb):
+def buildShip(sb, ship_xpath):
     try:
         sb.cdp.open(HANGAR)
-        sb.cdp.sleep(RANDOM_SLEEP)
-        sb.cdp.type(SATELLITE, '10\n')
-        sb.cdp.sleep(RANDOM_SLEEP)
-        print('Satellite build!')
+        if not warningMessage(sb):
+            sb.cdp.sleep(RANDOM_SLEEP)
+            sb.cdp.type(ship_xpath, '2\n')
+            sb.cdp.sleep(RANDOM_SLEEP)
+            print('Ship build!')
+        else:
+            pass
     except Exception as e:
         print("Exception: ",e)
-        print("Build Satellite Fail")
+        print("Build Fail")
         pass
 
 
@@ -586,6 +605,20 @@ def Resource(sb, resource, position):
         print("Resource Fail")
         return 1_000_000
 
+def warningMessage(sb):
+    try:
+        sb.cdp.sleep(RANDOM_SLEEP)
+        alert_element = sb.cdp.find_element("/html/body/div[5]/div/div/div[2]")
+        if alert_element:
+            print('Warning Message Found!')
+            return True
+        else:
+            print('Not Warning Message Found!')
+            return False
+    except Exception as e:
+        print("Exception: ",e)
+        print("Warning Message Fail")
+        return False
 
 def main(SB):
     with SB(uc=True, test=True) as sb:
@@ -606,4 +639,5 @@ def main(SB):
         print(requests.get(url).json())
 
 main(SB)
+
 
