@@ -25,7 +25,7 @@ BONUS = "http://srv220118-206152.vps.etecsa.cu/game.php?page=bonus&mode=bonus"
 OFFICER = "http://srv220118-206152.vps.etecsa.cu/game.php?page=officier"
 CONTINUE = 'input[value="Continuar"]'
 
-PLANETS = [43,363,364,365,635,638] #  -> Moon 635 | MOON_PLANET 365
+PLANETS = [43,363,364,365,635,638,1783] #  -> Moon 635 | MOON_PLANET 365
 
 Metal_Max_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[1]/td[2]/a"
 Crystal_Max_Button = "/html/body/div[5]/div/div/div[2]/form/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td[2]/a"
@@ -606,3 +606,4 @@ def main(SB):
         print(requests.get(url).json())
 
 main(SB)
+
