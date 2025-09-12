@@ -71,17 +71,24 @@ def get_cheapest_price(sb):
       print("Cheapest price...", cheapest_price)
       return cheapest_price
     except:
-      print("sell_resources Fail!")
-      message = 'sell_resources Fail!'
-      url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
-      print(requests.get(url).json())
+      print("get_cheapest_price Fail!")
+
+def produce_resource(sb):
+    for i in range(1, 12):
+      try:
+        sb.cdp.click(f'/html/body/div[1]/div/div[2]/div[3]/div/div[1]/div/div/a[{i}]')
+        sb.cdp.click("/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div/div/div[2]/div/div[2]/form/div/button[1]")
+        sb.cdp.click("/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div/div/div[2]/div/div[2]/form/div/button")
+      except:
+      print("produce_resource fail!")
+      pass
 
 def main(SB):
     with SB(uc=True) as sb:
         login(sb)
         get_resources(sb)
         sell_resources(sb)
-        sb.cdp.sleep(2)
+        produce_resource(sb)
         message = 'Sim Companies Done!'
         url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
         print(requests.get(url).json())
