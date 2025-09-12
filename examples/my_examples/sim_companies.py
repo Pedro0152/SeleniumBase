@@ -80,7 +80,7 @@ def produce_resource(sb):
         sb.cdp.click("/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div/div/div[2]/div/div[2]/form/div/button[1]")
         sb.cdp.click("/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div/div/div[2]/div/div[2]/form/div/button")
       except:
-      print("produce_resource fail!")
+        print("produce_resource fail!")
       pass
 
 def main(SB):
