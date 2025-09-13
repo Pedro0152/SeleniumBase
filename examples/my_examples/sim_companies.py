@@ -33,6 +33,7 @@ def login(sb):
       except:
         print("Iniciar sesión failed")
     print("Signing in...")
+    sb.cdp.sleep(4)
     sb.cdp.press_keys('input[name="email"]', 'kresh0152@gmail.com')
     sb.cdp.send_keys('input[name="password"]', 'Warehouse*13\n')
     print("Logged in...")
