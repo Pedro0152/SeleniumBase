@@ -84,6 +84,7 @@ def produce_resource(sb):
         sb.cdp.click("/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div/div/div[2]/div/div[2]/form/div/button[1]")
         sb.cdp.sleep(2)
         sb.cdp.click("/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div/div/div[2]/div/div[2]/form/div/button")
+        print("produce_resource!")
       except:
         print("produce_resource fail!")
       pass
@@ -91,8 +92,8 @@ def produce_resource(sb):
 def main(SB):
     with SB(uc=True) as sb:
         login(sb)
-        # get_resources(sb)
-        # sell_resources(sb)
+        get_resources(sb)
+        sell_resources(sb)
         produce_resource(sb)
         message = 'Sim Companies Done!'
         url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
