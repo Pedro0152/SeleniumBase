@@ -57,7 +57,7 @@ def sell_resources(sb):
       sb.cdp.click('button:contains("All")')
       sb.cdp.send_keys('input[name="price"]', str(cheapest_price) + '\n')
       print("Selled resources at price...", cheapest_price)
-      sb.cdp.sleep(2)
+      sb.cdp.sleep(3)
     except:
       print("sell_resources Fail!")
       message = 'sell_resources Fail!'
@@ -79,10 +79,13 @@ def get_cheapest_price(sb):
 def produce_resource(sb):
     for i in range(1, 12):
       try:
+        print("test1")
         sb.cdp.click(f'/html/body/div[1]/div/div[2]/div[3]/div/div[1]/div/div/a[{i}]')
-        sb.cdp.sleep(3)
+        print("test2")
+        sb.cdp.sleep(5)
         sb.cdp.click("/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div/div/div[2]/div/div[2]/form/div/button[1]")
-        sb.cdp.sleep(2)
+        print("test3")
+        sb.cdp.sleep(3)
         sb.cdp.click("/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div/div/div[2]/div/div[2]/form/div/button")
         print("produce_resource!")
       except:
