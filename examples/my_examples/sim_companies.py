@@ -77,15 +77,12 @@ def get_cheapest_price(sb):
       print("get_cheapest_price Fail!")
 
 def produce_resource(sb):
+    sb.cdp.open('https://www.simcompanies.com/landscape/')
+    sb.cdp.sleep(3)
     for i in range(1, 12):
       try:
-        print("test1")
         sb.cdp.click(f'/html/body/div[1]/div/div[2]/div[3]/div/div[1]/div/div/a[{i}]')
-        print("test2")
-        sb.cdp.sleep(5)
         sb.cdp.click("/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div/div/div[2]/div/div[2]/form/div/button[1]")
-        print("test3")
-        sb.cdp.sleep(3)
         sb.cdp.click("/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div/div/div[2]/div/div[2]/form/div/button")
         print("produce_resource!")
       except:
