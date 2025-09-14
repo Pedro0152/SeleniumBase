@@ -21,7 +21,7 @@ SELL_POWER = "https://www.simcompanies.com/headquarters/warehouse/power/sell/"
 def login(sb):
     print("Log in...")
     sb.activate_cdp_mode(URL_OVERVIEW)
-    sb.cdp.sleep(4)
+    sb.cdp.sleep(6)
     # print("Clicking...")
     # sb.cdp.click('button:contains("Essential Only")')
     # print("Clicked...")
