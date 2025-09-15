@@ -79,10 +79,9 @@ def get_cheapest_price(sb):
       print("get_cheapest_price Fail!")
 
 def produce_resource(sb):
-    sb.cdp.open('https://www.simcompanies.com/landscape/')
     for building in BUILDINGS:
       try:
-        sb.cdp.click(f'https://www.simcompanies.com/b/{building}/')
+        sb.cdp.open(f'https://www.simcompanies.com/b/{building}/')
         sb.cdp.sleep(3)
         sb.cdp.click("/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div/div/div[2]/div/div[2]/form/div/button[1]")
         sb.cdp.click("/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div/div/div[2]/div/div[2]/form/div/button")
