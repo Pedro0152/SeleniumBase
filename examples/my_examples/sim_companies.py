@@ -18,6 +18,8 @@ WAREHOUSE = "https://www.simcompanies.com/headquarters/warehouse/"
 MARKET = "https://www.simcompanies.com/market/resource/1/"
 SELL_POWER = "https://www.simcompanies.com/headquarters/warehouse/power/sell/"
 
+BUILDINGS = [46164635,46210973,46223536,46210975,46084693,46223542,46223589,46167238]
+
 def login(sb):
     print("Log in...")
     sb.activate_cdp_mode(URL_OVERVIEW)
@@ -78,11 +80,10 @@ def get_cheapest_price(sb):
 
 def produce_resource(sb):
     sb.cdp.open('https://www.simcompanies.com/landscape/')
-    sb.cdp.sleep(3)
-    for i in range(1, 12):
+    for building in BUILDINGS:
       try:
+        sb.cdp.click(f'https://www.simcompanies.com/b/{building}/')
         sb.cdp.sleep(3)
-        sb.cdp.click(f'/html/body/div[1]/div/div[2]/div[3]/div/div[1]/div/div/a[{i}]')
         sb.cdp.click("/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div/div/div[2]/div/div[2]/form/div/button[1]")
         sb.cdp.click("/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div/div/div[2]/div/div[2]/form/div/button")
         print("produce_resource!")
