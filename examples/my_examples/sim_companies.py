@@ -18,7 +18,7 @@ WAREHOUSE = "https://www.simcompanies.com/headquarters/warehouse/"
 MARKET = "https://www.simcompanies.com/market/resource/1/"
 SELL_POWER = "https://www.simcompanies.com/headquarters/warehouse/power/sell/"
 
-BUILDINGS = [46164635,46210973,46223536,46210975,46084693,46223542,46223589,46167238]
+BUILDINGS = [46164635,46210973,46223536,46210975,46084693,46223542,46223589,46167238,46298039]
 
 def login(sb):
     print("Log in...")
