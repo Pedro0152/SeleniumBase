@@ -1,4 +1,5 @@
 from seleniumbase import SB
+from datetime import datetime
 import requests
 import random
 import os
@@ -37,11 +38,12 @@ EXPLORE_THE_AREA = 'https://farmrpg.com/index.php#!/explore.php'
 MARKET = 'https://farmrpg.com/index.php#!/market.php'
 HARVEST_ALL_CROPS = 'a[class="button btnorange harvestallbtn"]'
 PLANT_ALL_SELECT = 'a[class="button btnblue plantallbtn"]'
-BUY_MORE_SEEDS = 'https://farmrpg.com/index.php#!/store.php?from=farm&id=767753'
 HOME = 'https://farmrpg.com/index.php#!/index.php'
 SELL_UNLOCKS = 'a[class="button btnorange sellallbtn"]'
 SELL_CROPS = 'a[class="button btngreenalt sellallcropsbtn"]'
 STORE = 'https://farmrpg.com/index.php#!/store.php'
+STOREHOUSE = 'https://farmrpg.com/index.php#!/storehouse.php?id=767753'
+DO_SOME_WORK = 'div:contains("Do some Work")'
 
 # Seeds
 PEPPERS_SEEDS = 'button[data-name="Peppers Seeds"]'
@@ -61,10 +63,13 @@ CABBAGE_SEEDS = 'button[data-name="Cabbage Seeds"]'
 PINE_SEEDS = 'button[data-name="Pine Seeds"]'
 
 # Explore Area
-SMALL_CAVE = '/html/body/div[3]/div[3]/div[2]/div[2]/div/div/div[4]/div/div/ul/li[1]/a/div/div[2]'
-SMALL_SPRING = '/html/body/div[3]/div[3]/div[2]/div[2]/div/div/div[4]/div/div/ul/li[2]/a/div/div[2]'
-HIGHLAND_HILLS = '/html/body/div[3]/div[3]/div[2]/div[2]/div/div/div[4]/div/div/ul/li[3]/a/div/div[2]'
-CANE_POLE_RIDGE = '/html/body/div[3]/div[3]/div[2]/div[2]/div/div/div[4]/div/div/ul/li[4]/a/div/div[2]'
+SMALL_CAVE = '/html/body/div[3]/div[3]/div[2]/div[2]/div/div/div[4]/div/div/ul/li[2]/a/div/div[2]'
+SMALL_SPRING = '/html/body/div[3]/div[3]/div[2]/div[2]/div/div/div[4]/div/div/ul/li[3]/a/div/div[2]'
+HIGHLAND_HILLS = '/html/body/div[3]/div[3]/div[2]/div[2]/div/div/div[4]/div/div/ul/li[4]/a/div/div[2]'
+CANE_POLE_RIDGE = '/html/body/div[3]/div[3]/div[2]/div[2]/div/div/div[4]/div/div/ul/li[5]/a/div/div[2]'
+MISTY_FOREST = '/html/body/div[3]/div[3]/div[2]/div[2]/div/div/div[4]/div/div/ul/li[6]/a/div/div[2]'
+BLACK_ROCK_CANYON = '/html/body/div[3]/div[3]/div[2]/div[2]/div/div/div[4]/div/div/ul/li[7]/a/div/div[2]'
+MOUNT_BANON = '/html/body/div[3]/div[3]/div[2]/div[2]/div/div/div[4]/div/div/ul/li[8]/a/div/div[2]'
 
 def login(sb):
     sb.activate_cdp_mode(URL_LOGIN)
@@ -77,6 +82,14 @@ def login(sb):
         sb.cdp.sleep(2)
     except Exception as e:
         print('Login fail', e)
+
+def daily_action(sb, ):
+    now = datetime.now()
+    if now.hour < 5:
+      try:
+        increase_max_inventory(sb)
+      except:
+        print("Daily Action Fail!")
 
 def plant_all(sb):
     try:
@@ -129,6 +142,18 @@ def farm(sb):
     plant_all(sb)
     sb.cdp.sleep(3)
 
+def increase_max_inventory(sb):
+    try:
+        sb.cdp.open(STOREHOUSE)
+        sb.cdp.refresh()
+        sb.cdp.sleep(RANDOM_SLEEP)
+        sb.cdp.mouse_click(DO_SOME_WORK)
+        sb.cdp.sleep(RANDOM_SLEEP)
+        sb.cdp.mouse_click(YES)
+        print("Max Inventory Increased")
+    except Exception as e:
+        print('Max Inventory Fail', e)
+
 def go_to_explore_area(sb, explore_area=None):
     sb.cdp.open(HOME)
     sb.cdp.refresh()
@@ -136,7 +161,7 @@ def go_to_explore_area(sb, explore_area=None):
     sb.cdp.open(EXPLORE_THE_AREA)
     sb.cdp.refresh()
     sb.cdp.sleep(RANDOM_SLEEP)
-    sb.cdp.mouse_click(SMALL_SPRING)
+    sb.cdp.mouse_click(CANE_POLE_RIDGE)
     sb.cdp.sleep(RANDOM_SLEEP)
 
 def explore(sb):
@@ -173,9 +198,10 @@ def harvest(sb):
 def main(SB):
     with SB(uc=True,test=True) as sb:
         login(sb)
+        daily_action(sb)
         farm(sb)
         sell_crop(sb)
-        buy_crop(sb, EGGPLANT_SEEDS)
+        buy_crop(sb, CORN_SEEDS)
         go_to_explore_area(sb, SMALL_SPRING)
         spend_stamina(sb)
         harvest(sb)
