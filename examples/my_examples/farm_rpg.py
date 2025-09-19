@@ -153,8 +153,17 @@ def increase_max_inventory(sb):
         sb.cdp.mouse_click(DO_SOME_WORK)
         sb.cdp.sleep(2)
         print("Clicked some work button")
-        sb.cdp.mouse_click(YES)
-        print("Max Inventory Increased")
+        try:
+          sb.cdp.mouse_click(YES)
+          print("Yes Clicked")
+        except:
+            print("1st Try Clicking Yes Failed!...Try Again")
+            sb.cdp.sleep(RANDOM_SLEEP)
+            try:
+              sb.cdp.mouse_click('/html/body/div[14]/div/div[2]')
+              print("Yes Clicked")
+            except:
+              print("2nd Try Clicking Yes Failed!..")
     except Exception as e:
         print('Max Inventory Fail', e)
 
