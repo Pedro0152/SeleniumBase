@@ -85,6 +85,7 @@ def login(sb):
 
 def daily_action(sb, ):
     now = datetime.now()
+    print("datetime: ",now)
     if now.hour < 5:
       try:
         increase_max_inventory(sb)
@@ -144,11 +145,12 @@ def farm(sb):
 
 def increase_max_inventory(sb):
     try:
+        sb.cdp.sleep(3)
         sb.cdp.open(STOREHOUSE)
         sb.cdp.refresh()
-        sb.cdp.sleep(RANDOM_SLEEP)
+        sb.cdp.sleep(2)
         sb.cdp.mouse_click(DO_SOME_WORK)
-        sb.cdp.sleep(RANDOM_SLEEP)
+        sb.cdp.sleep(1)
         sb.cdp.mouse_click(YES)
         print("Max Inventory Increased")
     except Exception as e:
