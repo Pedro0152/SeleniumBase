@@ -43,7 +43,7 @@ SELL_UNLOCKS = 'a[class="button btnorange sellallbtn"]'
 SELL_CROPS = 'a[class="button btngreenalt sellallcropsbtn"]'
 STORE = 'https://farmrpg.com/index.php#!/store.php'
 STOREHOUSE = 'https://farmrpg.com/index.php#!/storehouse.php?id=767753'
-DO_SOME_WORK = 'div:contains("Do some Work")'
+DO_SOME_WORK = 'div:contains(" Do some Work")'
 
 # Seeds
 PEPPERS_SEEDS = 'button[data-name="Peppers Seeds"]'
@@ -145,12 +145,14 @@ def farm(sb):
 
 def increase_max_inventory(sb):
     try:
-        sb.cdp.sleep(3)
+        sb.cdp.sleep(2)
         sb.cdp.open(STOREHOUSE)
         sb.cdp.refresh()
-        sb.cdp.sleep(2)
+        sb.cdp.sleep(4)
+        print("Max Inventory Increased")
         sb.cdp.mouse_click(DO_SOME_WORK)
-        sb.cdp.sleep(1)
+        sb.cdp.sleep(2)
+        print("Clicked some work button")
         sb.cdp.mouse_click(YES)
         print("Max Inventory Increased")
     except Exception as e:
