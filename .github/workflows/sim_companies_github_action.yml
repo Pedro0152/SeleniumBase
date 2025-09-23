@@ -9,7 +9,7 @@ env:
 on:
   workflow_dispatch:  # Allows manual trigger
   schedule:
-    - cron: '10 */6 * * *'  # Runs every 6 hours and 5 minutes.
+    - cron: '15 */6 * * *'  # Runs every 6 hours and 15 minutes.
 
 jobs:
   run-bot:
