@@ -11,7 +11,7 @@ TOKEN = os.environ["TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
 USERNAME = os.environ["USERNAME_SIM_COMPANIES"]
 PASSWORD = os.environ["PASSWORD_SIM_COMPANIES"]
-WORKFLOW_ACTION_TOKEN = os.environ["WORKFLOW_ACTION_TOKEN"]
+ACTION_TOKEN = os.environ["WORKFLOW_ACTION_TOKEN"]
 
 # Main BUTTONS:
 ACCEPT_COOKIE = 'class="css-uyxdsm btn btn-lg btn-secondary"'
@@ -197,7 +197,7 @@ def update_workflow_file(cron_expression: str):
     WORKFLOW_FILE = ".github/workflows/sim_companies_github_action.yml"
 
     # --- Conexión ---
-    g = Github(auth=Auth.Token(WORKFLOW_ACTION_TOKEN))
+    g = Github(auth=Auth.Token(ACTION_TOKEN))
     repo = g.get_repo(REPO_NAME)
 
     # --- Leer workflow ---
@@ -237,6 +237,9 @@ def main(SB):
         get_resources(sb)
         sell_resources(sb)
         produce_resource(sb)
+        factory_statuses = get_factories_status_and_time(sb)
+        if factory_statuses:
+            calculate_and_update_schedule(factory_statuses)
         message = 'Sim Companies Done!'
         url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
         print(requests.get(url).json())
