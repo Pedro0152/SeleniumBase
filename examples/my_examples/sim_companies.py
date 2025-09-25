@@ -11,7 +11,7 @@ TOKEN = os.environ["TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
 USERNAME = os.environ["USERNAME_SIM_COMPANIES"]
 PASSWORD = os.environ["PASSWORD_SIM_COMPANIES"]
-WORKFLOW_TOKEN = os.environ["GITHUB_WORKFLOW_TOKEN"]
+WORKFLOW_TOKEN = os.environ["WORKFLOW_ACTION_TOKEN"]
 
 # Main BUTTONS:
 ACCEPT_COOKIE = 'class="css-uyxdsm btn btn-lg btn-secondary"'
