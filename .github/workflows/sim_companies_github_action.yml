@@ -39,7 +39,7 @@ jobs:
 
         pip install PyGithub
 
-        pip install yaml
+        pip install PyYAML
 
         '
     - name: Run python script
