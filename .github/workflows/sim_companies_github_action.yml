@@ -4,6 +4,8 @@ env:
   CHAT_ID: ${{ secrets.CHAT_ID }}
   USERNAME_SIM_COMPANIES: ${{ secrets.USERNAME_SIM_COMPANIES }}
   PASSWORD_SIM_COMPANIES: ${{ secrets.PASSWORD_SIM_COMPANIES }}
+  WORKFLOW_ACTION_TOKEN: ${{ secrets.WORKFLOW_ACTION_TOKEN }}
+
 'on':
   workflow_dispatch: null
   schedule:
@@ -36,6 +38,8 @@ jobs:
         pip install requests
 
         pip install PyGithub
+
+        pip install yaml
 
         '
     - name: Run python script
