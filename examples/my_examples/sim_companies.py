@@ -4,6 +4,7 @@ import random
 import os
 
 URL_OVERVIEW = 'https://www.simcompanies.com/'
+URL_MAIN = 'https://www.simcompanies.com/landscape/'
 LOGIN = "/html/body/section/div[2]/div/div[2]/div/div[2]/form/div[4]/button"
 RANDOM_SLEEP = float(random.randint(100, 200) / 50)
 
