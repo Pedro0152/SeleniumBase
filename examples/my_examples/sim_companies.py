@@ -187,13 +187,13 @@ def calculate_and_update_schedule(factories):
         target_seconds = first_to_finish_upgrade["remaining_seconds"]
         print(f"Próxima ejecución basada en la mejora más próxima: {timedelta(seconds=target_seconds)}")
     elif producing_factories:
-        # Prioridad 2: La que tarda MÁS en producir
-        longest_production = max(producing_factories, key=lambda f: f["remaining_seconds"])
-        target_seconds = longest_production["remaining_seconds"]
+        # Prioridad 2: La que tarda MENOS en producir
+        shortest_production = min(producing_factories, key=lambda f: f["remaining_seconds"])
+        target_seconds = shortest_production["remaining_seconds"]
         print(f"Próxima ejecución basada en la producción más larga: {timedelta(seconds=target_seconds)}")
     else:
         print("No hay fábricas activas. No se cambiará la hora.")
-    target_seconds += 6 
+    target_seconds += 60
     # Calcular la hora futura en UTC (GitHub Actions usa UTC)
     now_utc = datetime.now(timezone.utc)
     next_run_time_utc = now_utc + timedelta(seconds=target_seconds)
