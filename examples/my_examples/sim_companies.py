@@ -127,7 +127,7 @@ def parse_duration_to_seconds(duration_str: str) -> int:
     # --- 3. Asignar la zona horaria a la hora de la fábrica ---
     # Asumimos que la hora del juego está en tu zona horaria (Uruguay, UTC-3).
     # ¡IMPORTANTE! Si el juego usa otra zona horaria, debes cambiar timedelta(hours=-3).
-    uruguay_tz = timezone(timedelta(hours=-3))
+    uruguay_tz = timezone(timedelta(hours=+3))
     finish_time_aware = finish_time_naive.replace(tzinfo=uruguay_tz)
     # --- 4. Obtener la hora actual en UTC ---
     # Las GitHub Actions siempre se ejecutan en horario UTC.
