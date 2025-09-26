@@ -1,6 +1,11 @@
+from datetime import datetime, timezone, timedelta
+from github import Auth, Github
 from seleniumbase import SB
+import subprocess
 import requests
 import random
+import base64
+import yaml
 import os
 
 URL_OVERVIEW = 'https://www.simcompanies.com/'
@@ -19,8 +24,13 @@ ACCEPT_COOKIE = 'class="css-uyxdsm btn btn-lg btn-secondary"'
 WAREHOUSE = "https://www.simcompanies.com/headquarters/warehouse/"
 MARKET = "https://www.simcompanies.com/market/resource/1/"
 SELL_POWER = "https://www.simcompanies.com/headquarters/warehouse/power/sell/"
+UPGRADE = 'button:contains("Upgrade")'
+UPGRADE_COST = 'td.css-16vr4dv.evklgu42'
 
 BUILDINGS = [46164635,46210973,46223536,46210975,46084693,46223542,46223589,46167238,46298039]
+
+PRODUCING = '/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div/div[1]'
+UPGRADING = '/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div'
 
 def login(sb):
     print("Log in...")
@@ -80,17 +90,17 @@ def get_cheapest_price(sb):
     except:
       print("get_cheapest_price Fail!")
 
-def produce_resource(sb):
-    for building in BUILDINGS:
+def produce_resource(sb, building):
       try:
         sb.cdp.open(f'https://www.simcompanies.com/b/{building}/')
         sb.cdp.sleep(3)
         sb.cdp.click("/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div/div/div[2]/div/div[2]/form/div/button[1]")
+        sb.cdp.sleep(1)
         sb.cdp.click("/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div/div/div[2]/div/div[2]/form/div/button")
         print("produce_resource!")
       except:
         print("produce_resource fail!")
-      pass
+        pass
 
 def parse_duration_to_seconds(duration_str: str) -> int:
     """
@@ -232,15 +242,157 @@ def update_workflow_file(cron_expression: str):
     )
     print(f"Cron updated!")
 
-def main(SB):
-    with SB(uc=True) as sb:
+def get_game_state(sb):
+    """
+    # PSEUDOCÓDIGO USADO:
+    # DINERO_ACTUAL = Tu dinero inicial
+    # MIS_FABRICAS: Lista de [N_FABRICAS] objetos de tipo Fabrica
+    # Para cada fábrica, obtener su nivel y estado ("LIBRE", "PRODUCIENDO", etc.)
+    #
+    # Esta función escanea la página para obtener todos los datos necesarios para tomar decisiones.
+    """
+    print("Obteniendo estado actual del juego (dinero y fábricas)...")
+    sb.cdp.open(URL_MAIN)
+    sb.sleep(4)
+
+    # 1. Obtener dinero actual
+    try:
+        # ¡DEBES BUSCAR EL SELECTOR CORRECTO PARA TU DINERO!
+        money_element = sb.cdp.find_element("div.css-q2xpdd")
+        # Limpiar el texto para obtener solo el número (ej: "$1,234.56" -> 1234.56)
+        current_money = float(money_element.text.replace('$', '').replace(',', ''))
+        print(f"Dinero actual: ${current_money}")   
+    except Exception as e:
+        print(f"Error al obtener el dinero actual. Usando 0. Error: {e}")
+        current_money = 0
+
+    # 2. Obtener estado de las fábricas
+    factories = []
+    for building_id in BUILDINGS:
+        try:
+            # Construye el selector para cada edificio usando su ID
+            # ¡DEBES BUSCAR EL SELECTOR CORRECTO PARA CADA DATO!
+            sb.cdp.open(f'https://www.simcompanies.com/b/{building_id}/')
+            sb.cdp.sleep(4)
+            # Busca el nivel dentro del elemento del edificio
+            level_element = sb.cdp.find_element('div.css-2pg1ps')
+            level = int(level_element.text.replace('LEVEL ', ''))
+            print(f"Edificio ID {building_id}: Nivel {level}")
+            if sb.cdp.is_element_present('p.mt20'): # Selector para edificio ocupado
+                status = "OCUPADO"
+                upgrade_cost = None
+            else:
+                sb.cdp.click(UPGRADE)
+                sb.cdp.sleep(1)
+                upgrade_cost_element = sb.cdp.find_element(UPGRADE_COST)
+                print(f"Edificio ID {building_id}: Costo de mejora {upgrade_cost_element.text}")
+                upgrade_cost = upgrade_cost_element.text.replace('$', '').replace(',', '')
+                print(f"Edificio ID {building_id}: Costo de mejora limpio {upgrade_cost}")
+                status = "LIBRE"
+
+            factories.append({
+                "id": building_id,
+                "level": level,
+                "status": status,
+                "upgrade_cost": upgrade_cost,
+            })
+        except Exception as e:
+            print(f"No se pudo obtener información para el edificio {building_id}. Error: {e}")
+            
+    game_state = {
+        "money": current_money,
+        "factories": factories
+    }
+    print(f"Estado obtenido: {game_state}")
+    return game_state
+
+def decide_and_act_on_factories(sb, game_state):
+    """
+    # PSEUDOCÓDIGO USADO:
+    # MIENTRAS (hay fábricas libres):
+    #     fabrica_a_mejorar = encontrar_fabrica_menor_nivel()
+    #     RESERVA_DE_SEGURIDAD = (N_FABRICAS - 1) * costo_max_produccion
+    #     SI (puedo mejorar Y es la fábrica correcta):
+    #         // Decisión: MEJORAR
+    #     SINO:
+    #         // Decisión: PRODUCIR
+    #
+    # Implementa la lógica principal de decisión para cada fábrica libre.
+    """
+    print("Tomando decisiones para las fábricas libres...")
+    factories = game_state["factories"]
+    money = game_state["money"]
+    
+    # Filtrar solo las fábricas que están libres
+    free_factories = [f for f in factories if f["status"] == "LIBRE"]
+    level_factories = [f["level"] for f in factories]
+    if not free_factories:
+        print("No hay fábricas libres para asignar tareas.")
+
+    # 1. Encontrar la fábrica de menor nivel como candidata a mejora
+    non_max_level_factories = [f for f in factories if f["level"] < 20]
+    if not non_max_level_factories:
+        print("¡Todas las fábricas están a nivel máximo!")
+    
+    # 2. Calcular la reserva de seguridad
+    # Usamos el costo de producción más alto conocido como una estimación segura
+    costo_max_produccion = max(level_factories) * 10_000  # Ejemplo: costo aumenta con el nivel
+    free_factories_count = len(free_factories)
+    if free_factories_count > 1:
+        RESERVA_DE_SEGURIDAD = (free_factories_count) * costo_max_produccion
+    else:
+        RESERVA_DE_SEGURIDAD = 2 * costo_max_produccion
+    print(f"Reserva de seguridad calculada: ${RESERVA_DE_SEGURIDAD}")
+
+    # 3. Iterar sobre las fábricas libres y asignarles tareas
+    for factory in free_factories:
+        factory_id = factory["id"]
+        # Comprobar si esta fábrica es la candidata a ser mejorada
+        if factory_id in non_max_level_factories:
+            costo_mejora_actual = factory["upgrade_cost"]
+            print(f"Evaluando mejora para Edificio ID {factory_id} con costo ${costo_mejora_actual}")    
+            # Condición para mejorar
+            if money >= (costo_mejora_actual + RESERVA_DE_SEGURIDAD):
+                print(f"Decisión para ID {factory_id}: MEJORAR. (Dinero: ${money}, Costo: ${costo_mejora_actual})")
+                try:
+                    # Lógica para hacer clic en el botón de mejora
+                    sb.cdp.open(f"https://www.simcompanies.com/b/{factory_id}")
+                    sb.cdp.sleep(2)
+                    sb.cdp.click('button:contains("Upgrade")') # ¡DEBES BUSCAR EL SELECTOR CORRECTO!
+                    sb.cdp.sleep(1)
+                    sb.cdp.click('div.modal-footer > button.btn-primary') # Confirmar la mejora
+                    money -= costo_mejora_actual # Actualizar dinero localmente
+                    # send_telegram_message(f"✅ Fábrica {factory['id']} puesta a mejorar al nivel {factory['level'] + 1}.")
+                except Exception as e:
+                    print(f"Falló el intento de mejora para {factory['id']}. Se pondrá a producir. Error: {e}")
+                    produce_resource(sb, factory_id)
+            else:
+                print(f"Decisión para ID {factory['id']}: PRODUCIR. (Fondos insuficientes para mejorar)")
+                produce_resource(sb, factory_id)
+        else:
+            # Si no es la candidata a mejora, siempre produce
+            print(f"Decisión para ID {factory['id']}: PRODUCIR.")
+            produce_resource(sb, factory_id)
+
+def main():
+    with SB(uc=True, headless=False) as sb:
+#    update_workflow_file() # Ejemplo: todos los días a medianoche UTC
         login(sb)
         get_resources(sb)
         sell_resources(sb)
-        produce_resource(sb)
+        current_state = get_game_state(sb) # Tu función existente
+        if current_state["factories"]:
+            decide_and_act_on_factories(sb, current_state) # Tu función existente
+        else:
+            print("No se pudo obtener el estado de las fábricas.")
+
+        # --- NUEVA LÓGICA PARA REPROGRAMAR ---
+        # Se ejecuta después de actuar, para programar la siguiente ejecución
+
         factory_statuses = get_factories_status_and_time(sb)
         if factory_statuses:
             calculate_and_update_schedule(factory_statuses)
+
         message = 'Sim Companies Done!'
         url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
         print(requests.get(url).json())
