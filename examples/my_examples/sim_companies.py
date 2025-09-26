@@ -374,7 +374,7 @@ def decide_and_act_on_factories(sb, game_state):
             print(f"Decisión para ID {factory['id']}: PRODUCIR.")
             produce_resource(sb, factory_id)
 
-def main():
+def main(SB):
     with SB(uc=True, headless=False) as sb:
 #    update_workflow_file() # Ejemplo: todos los días a medianoche UTC
         login(sb)
