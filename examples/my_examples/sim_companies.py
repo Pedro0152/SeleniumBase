@@ -127,7 +127,7 @@ def parse_duration_to_seconds(duration_str: str) -> int:
     # --- 3. Asignar la zona horaria a la hora de la fábrica ---
     # Asumimos que la hora del juego está en tu zona horaria (Uruguay, UTC-3).
     # ¡IMPORTANTE! Si el juego usa otra zona horaria, debes cambiar timedelta(hours=-3).
-    uruguay_tz = timezone(timedelta(hours=+3))
+    uruguay_tz = timezone(timedelta(hours=-3))
     finish_time_aware = finish_time_naive.replace(tzinfo=uruguay_tz)
     # --- 4. Obtener la hora actual en UTC ---
     # Las GitHub Actions siempre se ejecutan en horario UTC.
@@ -138,7 +138,7 @@ def parse_duration_to_seconds(duration_str: str) -> int:
     remaining_seconds = int(time_difference.total_seconds())
     print(f"Remaining seconds until '{finish_time_aware}' (UTC-3): {remaining_seconds}")
     # Si la fecha ya pasó, los segundos serían negativos. Devolvemos 0 en ese caso.
-    return max(3600, remaining_seconds)
+    return max(600, remaining_seconds)
 # --- Ejemplo de uso ---
 # Supongamos que la hora actual UTC es 25 de Sep de 2025 a las 06:23 AM
 # La hora de la fábrica es a las 11:08 PM en UTC-3, que equivale a las 02:08 AM del 26 de Sep en UTC.
@@ -175,9 +175,9 @@ def calculate_and_update_schedule(factories):
     Calcula y actualiza la programación basada en el estado de las fábricas
     """
     upgrading_factories = [f for f in factories if f["status"] == "Upgrading"]
-    print('upgrading factories:', upgrading_factories)
+    # print('upgrading factories:', upgrading_factories)
     producing_factories = [f for f in factories if f["status"] == "Producing"]
-    print('producing factories:', producing_factories)
+    # print('producing factories:', producing_factories)
 
     target_seconds = 0
     
@@ -190,7 +190,7 @@ def calculate_and_update_schedule(factories):
         # Prioridad 2: La que tarda MENOS en producir
         shortest_production = min(producing_factories, key=lambda f: f["remaining_seconds"])
         target_seconds = shortest_production["remaining_seconds"]
-        print(f"Próxima ejecución basada en la producción más larga: {timedelta(seconds=target_seconds)}")
+        print(f"Próxima ejecución basada en la producción más corta: {timedelta(seconds=target_seconds)}")
     else:
         print("No hay fábricas activas. No se cambiará la hora.")
     target_seconds += 60
