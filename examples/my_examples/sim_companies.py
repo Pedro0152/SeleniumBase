@@ -175,9 +175,9 @@ def calculate_and_update_schedule(factories):
     Calcula y actualiza la programación basada en el estado de las fábricas
     """
     upgrading_factories = [f for f in factories if f["status"] == "Upgrading"]
-    # print('upgrading factories:', upgrading_factories)
+    print('upgrading factories:', upgrading_factories)
     producing_factories = [f for f in factories if f["status"] == "Producing"]
-    # print('producing factories:', producing_factories)
+    print('producing factories:', producing_factories)
 
     target_seconds = 0
     
@@ -303,7 +303,7 @@ def get_game_state(sb):
         "money": current_money,
         "factories": factories
     }
-    print(f"Estado obtenido: {game_state}")
+    # print(f"Estado obtenido: {game_state}")
     return game_state
 
 def decide_and_act_on_factories(sb, game_state):
