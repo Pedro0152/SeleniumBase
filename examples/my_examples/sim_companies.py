@@ -286,7 +286,7 @@ def get_game_state(sb):
                 sb.cdp.sleep(1)
                 upgrade_cost_element = sb.cdp.find_element(UPGRADE_COST)
                 print(f"Edificio ID {building_id}: Costo de mejora {upgrade_cost_element.text}")
-                upgrade_cost = upgrade_cost_element.text.replace('$', '').replace(',', '')
+                upgrade_cost = float(upgrade_cost_element.text.replace('$', '').replace(',', ''))
                 print(f"Edificio ID {building_id}: Costo de mejora limpio {upgrade_cost}")
                 status = "LIBRE"
 
