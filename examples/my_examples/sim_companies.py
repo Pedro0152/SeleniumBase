@@ -25,7 +25,7 @@ WAREHOUSE = "https://www.simcompanies.com/headquarters/warehouse/"
 MARKET = "https://www.simcompanies.com/market/resource/1/"
 SELL_POWER = "https://www.simcompanies.com/headquarters/warehouse/power/sell/"
 UPGRADE = 'button:contains("Upgrade")'
-UPGRADE_COST = 'td.css-16vr4dv.evklgu42'
+UPGRADE_COST = '/html/body/div[1]/div/div[2]/div[3]/div/div/div[2]/div[2]/div/div/div[2]/div/table/tbody/tr[5]/td[3]/b'
 
 BUILDINGS = [46164635,46210973,46223536,46210975,46084693,46223542,46223589,46167238,46298039]
 
