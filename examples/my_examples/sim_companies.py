@@ -348,7 +348,7 @@ def decide_and_act_on_factories(sb, game_state):
     for factory in free_factories:
         factory_id = factory["id"]
         # Comprobar si esta fábrica es la candidata a ser mejorada
-        if factory_id in non_max_level_factories:
+        if factory_id:
             costo_mejora_actual = factory["upgrade_cost"]
             print(f"Evaluando mejora para Edificio ID {factory_id} con costo ${costo_mejora_actual}")    
             # Condición para mejorar
