@@ -27,7 +27,7 @@ SELL_POWER = "https://www.simcompanies.com/headquarters/warehouse/power/sell/"
 UPGRADE = 'button:contains("Upgrade")'
 UPGRADE_COST = '/html/body/div[1]/div/div[2]/div[3]/div/div/div[2]/div[2]/div/div/div[2]/div/table/tbody/tr[5]/td[3]/b'
 
-BUILDINGS = [46164635,46210973,46223536,46210975,46084693,46223542,46223589,46167238,46298039]
+BUILDINGS = [46164635,46210973,46223536,46210975,46539977,46084693,46223542,46223589,46167238,46298039]
 
 PRODUCING = '/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div/div[1]'
 UPGRADING = '/html/body/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div'
@@ -357,10 +357,11 @@ def decide_and_act_on_factories(sb, game_state):
                 try:
                     # Lógica para hacer clic en el botón de mejora
                     sb.cdp.open(f"https://www.simcompanies.com/b/{factory_id}")
+                    sb.cdp.sleep(3)
+                    sb.cdp.click('button:contains("Upgrade")')
                     sb.cdp.sleep(2)
-                    sb.cdp.click('button:contains("Upgrade")') # ¡DEBES BUSCAR EL SELECTOR CORRECTO!
-                    sb.cdp.sleep(1)
-                    sb.cdp.click('div.modal-footer > button.btn-primary') # Confirmar la mejora
+                    sb.cdp.click('button:contains("Buy missing")') # Comprar materiales.
+                    sb.cdp.click('button:contains("Upgrade now")')
                     money -= costo_mejora_actual # Actualizar dinero localmente
                     # send_telegram_message(f"✅ Fábrica {factory['id']} puesta a mejorar al nivel {factory['level'] + 1}.")
                 except Exception as e:
