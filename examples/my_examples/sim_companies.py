@@ -361,7 +361,9 @@ def decide_and_act_on_factories(sb, game_state):
                     sb.cdp.click('button:contains("Upgrade")')
                     sb.cdp.sleep(2)
                     sb.cdp.click('button:contains("Buy missing")') # Comprar materiales.
+                    sb.cdp.sleep(3)
                     sb.cdp.click('button:contains("Upgrade now")')
+                    sb.cdp.sleep(2)
                     money -= costo_mejora_actual # Actualizar dinero localmente
                     # send_telegram_message(f"✅ Fábrica {factory['id']} puesta a mejorar al nivel {factory['level'] + 1}.")
                 except Exception as e:
