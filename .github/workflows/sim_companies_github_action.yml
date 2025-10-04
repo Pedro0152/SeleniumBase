@@ -8,7 +8,7 @@ env:
 'on':
   workflow_dispatch: null
   schedule:
-  - cron: 8 16 4 10 *
+  - cron: 13 9 4 10 *
 permissions:
   contents: write
 jobs:
